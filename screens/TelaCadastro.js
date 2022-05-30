@@ -9,8 +9,7 @@ import {
   StyleSheet,
   Animated,
   Keyboard,
-  ScrollView
-
+  ScrollView,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 
@@ -82,93 +81,93 @@ export default function TelaCadastro() {
 
   return (
     <ScrollView>
-    <KeyboardAvoidingView style={styles.background}>
-      
-      <View style={styles.containerLogo}>
-        <Animated.Image
-          style={{
-            width: logo.x,
-            height: logo.y,
-          }}
-          source={require('../src/assets/logo.png')}
-        />
-      </View>
-
-      <Animated.View
-        style={[
-          styles.container,
-          {
-            opacity: opacity,
-            transform: [{translateY: offset.y}],
-          },
-        ]}>
-        <Text style={styles.txtCriar}>Crie sua Conta:</Text>
-
-        <TextInput
-          style={styles.inputEmail}
-          placeholder="Email"
-          placeholderTextColor="#C0C0C0"
-          autoCorrect={false}
-          onChangeText={email => setInputEmail(email)}
-        />
-
-        <TextInput
-          style={styles.inputEmail}
-          placeholder="Confirme seu endereço de email"
-          placeholderTextColor="#C0C0C0"
-          autoCorrect={false}
-        />
-
-        <TextInput
-          style={styles.inputSenha}
-          placeholder="Senha"
-          placeholderTextColor="#C0C0C0"
-          autoCorrect={false}
-          value={inputSenha}
-          onChangeText={senha => setInputSenha(senha)}
-          secureTextEntry={hidePass}
-        />
-        <TextInput
-          style={styles.inputSenha}
-          placeholder="Corfirme sua senha"
-          placeholderTextColor="#C0C0C0"
-          autoCorrect={false}
-          secureTextEntry={hidePass}
-        />
-
-        <TouchableOpacity
-          style={styles.btnSubmit}
-          onPress={() => register(inputEmail, inputSenha)}>
-          <Text style={styles.submitText}>Cadastrar-se</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.txtCriar}>Cadastre-se com Google ou Facebook:</Text>
-
-        <View style={{flex: 1, flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => googleRegister()}>
-            <Image
-              style={{
-                width: 60,
-                height: 60,
-                marginRight: '8%',
-              }}
-              source={require('../src/assets/google.png')}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => criarConta()}>
-            <Image
-              style={{
-                width: 62,
-                height: 62,
-                marginBottom: '40%',
-              }}
-              source={require('../src/assets/facebook.png')}
-            />
-          </TouchableOpacity>
+      <KeyboardAvoidingView style={styles.background}>
+        <View style={styles.containerLogo}>
+          <Animated.Image
+            style={{
+              width: logo.x,
+              height: logo.y,
+            }}
+            source={require('../src/assets/logo.png')}
+          />
         </View>
-      </Animated.View>
-      
-    </KeyboardAvoidingView>
+
+        <Animated.View
+          style={[
+            styles.container,
+            {
+              opacity: opacity,
+              transform: [{translateY: offset.y}],
+            },
+          ]}>
+          <Text style={styles.txtCriar}>Crie sua Conta:</Text>
+
+          <TextInput
+            style={styles.inputEmail}
+            placeholder="Email"
+            placeholderTextColor="#C0C0C0"
+            autoCorrect={false}
+            onChangeText={email => setInputEmail(email)}
+          />
+
+          <TextInput
+            style={styles.inputEmail}
+            placeholder="Confirme seu endereço de email"
+            placeholderTextColor="#C0C0C0"
+            autoCorrect={false}
+          />
+
+          <TextInput
+            style={styles.inputSenha}
+            placeholder="Senha"
+            placeholderTextColor="#C0C0C0"
+            autoCorrect={false}
+            value={inputSenha}
+            onChangeText={senha => setInputSenha(senha)}
+            secureTextEntry={hidePass}
+          />
+          <TextInput
+            style={styles.inputSenha}
+            placeholder="Corfirme sua senha"
+            placeholderTextColor="#C0C0C0"
+            autoCorrect={false}
+            secureTextEntry={hidePass}
+          />
+
+          <TouchableOpacity
+            style={styles.btnSubmit}
+            onPress={() => register(inputEmail, inputSenha)}>
+            <Text style={styles.submitText}>Cadastrar-se</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.txtCriar}>
+            Cadastre-se com Google ou Facebook:
+          </Text>
+
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => googleRegister()}>
+              <Image
+                style={{
+                  width: 60,
+                  height: 60,
+                  marginRight: '8%',
+                }}
+                source={require('../src/assets/google.png')}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => criarConta()}>
+              <Image
+                style={{
+                  width: 62,
+                  height: 62,
+                  marginBottom: '40%',
+                }}
+                source={require('../src/assets/facebook.png')}
+              />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
+      </KeyboardAvoidingView>
     </ScrollView>
   );
 }

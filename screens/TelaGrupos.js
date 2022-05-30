@@ -8,23 +8,75 @@ import {
   StyleSheet,
   Animated,
   TextInput,
+  FlatList,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
+import {useFocusEffect} from '@react-navigation/native';
+import firestore from '@react-native-firebase/firestore';
+import {set} from 'react-native-reanimated';
 
 export default function TelaGrupos({navigation}) {
+  const {user} = useContext(AuthContext);
+
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
   const [opacity] = useState(new Animated.Value(0));
 
   const {logout} = useContext(AuthContext);
 
-  const [inputBusca, setInputBusca] = useState('');
+  const [myGroups, setMyGroups] = useState('');
+
+  const [list, setList] = useState([]);
 
   const MoverCriarGrupos = () => {
     navigation.navigate('CriarGrupos');
   };
 
-  useEffect(() => {}, []);
+  const getMyGroups = () => {
+    firestore()
+      .collection('groups')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const group = {
+            description: documentSnapshot.description,
+            groupGame: documentSnapshot.data().groupGame,
+            groupName: documentSnapshot.data().groupName,
+            groupOwner: documentSnapshot.data().groupOwner,
+            members: documentSnapshot.data().members,
+            rank: documentSnapshot.data().rank,
+            rating: documentSnapshot.data().rating,
+          };
+          d.push(group);
+        });
+        console.log(d);
+        setList(d);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const renderItem = ({item}) => (
+    <>
+      <TouchableOpacity style={styles.buttonMaisStyle}>
+        <View style={styles.boxGrupos}>
+          <Text style={styles.grupoTitleText}>{item.groupName}</Text>
+          <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
+          <Text style={styles.grupoText}>Rank: {item.rank}</Text>
+          <Text style={styles.grupoText}>Tipo: {item.rank}</Text>
+          <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
+        </View>
+      </TouchableOpacity>
+    </>
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getMyGroups();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
@@ -41,95 +93,17 @@ export default function TelaGrupos({navigation}) {
             <Text style={styles.searchText}> Buscar Grupos</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.container2}>
+
+        <ScrollView>
           <Text style={styles.meusGruposText}>MEUS GRUPOS</Text>
-
-          <ScrollView horizontal={true}>
-            <View style={styles.containerJogos}>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>GRUPO LOLZINHO</Text>
-                  <Text style={styles.grupoText}>Jogo: League of Legends</Text>
-                  <Text style={styles.grupoText}>Participantes: 2/5</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Bronze</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>GRUPO LOLZINHO</Text>
-                  <Text style={styles.grupoText}>Jogo: League of Legends</Text>
-                  <Text style={styles.grupoText}>Participantes: 2/5</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Bronze</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>GRUPO LOLZINHO</Text>
-                  <Text style={styles.grupoText}>Jogo: League of Legends</Text>
-                  <Text style={styles.grupoText}>Participantes: 2/5</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Bronze</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
-
-        <View style={styles.container3}>
-          <Text style={styles.meusGruposText}>GRUPOS QUE PARTICIPO</Text>
-
-          <ScrollView horizontal={true}>
-            <View style={styles.containerJogos}>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>GRUPO LOLZINHO</Text>
-                  <Text style={styles.grupoText}>Jogo: League of Legends</Text>
-                  <Text style={styles.grupoText}>Participantes: 2/5</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Bronze</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>SOLO 2</Text>
-                  <Text style={styles.grupoText}>Jogo: League of Legends</Text>
-                  <Text style={styles.grupoText}>Participantes: 1/2</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Diamante</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <View style={styles.boxGrupos}>
-                  <Text style={styles.grupoTitleText}>CSTRIKE</Text>
-                  <Text style={styles.grupoText}>Jogo: CS-GO</Text>
-                  <Text style={styles.grupoText}>Participantes: 4/5</Text>
-                  <Text style={styles.grupoText}>Modalidade: Competitivo</Text>
-                  <Text style={styles.grupoText}>Rank: Xerife</Text>
-                  <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
+          <View>
+            <FlatList
+              data={list}
+              renderItem={renderItem}
+              keyExtractor={item => item.groupName}
+            />
+          </View>
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -143,8 +117,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#191919',
   },
   container: {
-    alignItems: 'center',
     width: '90%',
+    flexDirection: 'row',
   },
   container2: {
     backgroundColor: '#1D1D1D',

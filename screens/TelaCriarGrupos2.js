@@ -8,19 +8,28 @@ import {
   SafeAreaView,
   TextInput,
 } from 'react-native';
-import {Title} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {Picker} from '@react-native-picker/picker';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function TelaCriarGrupos2({navigation, route}) {
   const {user} = useContext(AuthContext);
+
+  const {criarGrupo} = useContext(AuthContext);
 
   const [data, setData] = useState([]);
   const [gameName, setGameName] = useState('');
   const [userData, setUserData] = useState(null);
 
   const [selectGame, setSelectGame] = useState();
+
+  const [inputGroupName, setInputGroupName] = useState('');
+  const [inputGroupGame, setInputGroupGame] = useState('');
+  const [inputGroupOwner, setInputGroupOwner] = useState('');
+  const [inputDescription, setInputDescription] = useState('');
+  const [inputMembers, setInputMembers] = useState([]);
+  const [inputRank, setRank] = useState('');
 
   const getUser = async () => {
     const currentUser = await firestore()
@@ -29,8 +38,8 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          //console.log('User Data', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
+          //console.log('Dados do usuário:', documentSnapshot.data());
+          setUserData(documentSnapshot.data(), setInputGroupOwner(user.uid));
         }
       });
   };
@@ -55,41 +64,42 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .get()
       .then(querySnapshot => {
         setGameName(querySnapshot.data().gameName);
+        setInputGroupGame(querySnapshot.data().gameName);
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
   };
 
-  const MoverCriarGrupos = () => {
-    navigation.navigate('CriarGrupos2');
+  const getUserName = () => {
+    firestore()
+      .collection('user')
+      .doc(user.uid)
+      .get()
+      .then(querySnapshot => {
+        setInputMembers(querySnapshot.data().userName);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
   };
 
-  useEffect(() => {
-    getGames(), getUser(), getNameGames();
-  }, []);
+  
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getGames(), getUser(), getNameGames(), getUserName();
+    }, [])
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
       <ScrollView>
         <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => ''}>
-            <View
-              style={{
-                height: 100,
-                width: 100,
-                borderRadius: 15,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginTop: '5%',
-              }}></View>
-          </TouchableOpacity>
+          <Text style={styles.userText}> {gameName} </Text>
         </View>
 
         <View style={{alignItems: 'center'}}></View>
-
-        <Text style={styles.userText}> {gameName} </Text>
-        
 
         <View>
           <Text style={styles.descriptionText}> Nome do grupo </Text>
@@ -100,20 +110,19 @@ export default function TelaCriarGrupos2({navigation, route}) {
               placeholderTextColor="#C0C0C0"
               autoCorrect={false}
               color="#EEEEEE"
-              value={''}
-              onChangeText={txt => setUserData({...userData, name: txt})}
+              onChangeText={groupName => setInputGroupName(groupName)}
             />
           </View>
+
           <Text style={styles.descriptionText}> Descrição </Text>
           <View style={{alignItems: 'center'}}>
             <TextInput
               style={styles.inputText}
-              placeholder="Digite uma descrição do seu grupo"
+              placeholder="Digite uma descrição para seu grupo"
               placeholderTextColor="#C0C0C0"
               autoCorrect={false}
               color="#EEEEEE"
-              value={''}
-              onChangeText={txt => setUserData({...userData, userName: txt})}
+              onChangeText={description => setInputDescription(description)}
             />
           </View>
 
@@ -122,10 +131,10 @@ export default function TelaCriarGrupos2({navigation, route}) {
             <Picker
               style={[styles.inputText]}
               selectedValue={selectGame}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectGame(itemValue)
-              }>
-              <Picker.Item label="Selecione seu ranque" value="" />
+              onValueChange={(itemValue, itemIndex) => {
+                setSelectGame(itemValue), setRank(itemValue);
+              }}>
+              <Picker.Item label="Selecione seu ranking" value="" />
               {data.map(item => (
                 <Picker.Item label={item} key={item} value={item} />
               ))}
@@ -135,7 +144,16 @@ export default function TelaCriarGrupos2({navigation, route}) {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             style={styles.btnSubmit}
-            onPress={() => handleUpdate()}>
+            onPress={() =>
+              criarGrupo(
+                inputGroupGame,
+                inputGroupName,
+                inputGroupOwner,
+                inputDescription,
+                inputMembers,
+                inputRank,
+              )
+            }>
             <Text style={styles.submitText}> Criar</Text>
           </TouchableOpacity>
         </View>
@@ -194,6 +212,7 @@ const styles = StyleSheet.create({
   userText: {
     color: '#FFF',
     fontSize: 30,
+    margin: '6%',
   },
   buttonText: {
     color: '#FFF',

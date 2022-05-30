@@ -19,10 +19,7 @@ export const AuthProvider = ({children}) => {
             await auth().signInWithEmailAndPassword(email, senha);
           } catch (error) {
             console.log(error);
-            Alert.alert(
-              'Ops!',
-              'Email ou senha incorretos, tente novamente!',
-            );
+            Alert.alert('Ops!', 'Email ou senha incorretos, tente novamente!');
           }
         },
 
@@ -37,10 +34,7 @@ export const AuthProvider = ({children}) => {
               .signInWithCredential(googleCredential)
               .catch(error => {
                 console.log('Alguma coisa deu errado: ', error);
-                Alert.alert(
-                  'Erro:',
-                  'Algo deu errado, tente novamente.',
-                );
+                Alert.alert('Erro:', 'Algo deu errado, tente novamente.');
               });
           } catch (error) {
             console.log({error});
@@ -137,6 +131,25 @@ export const AuthProvider = ({children}) => {
           } catch (e) {
             console.log(e);
           }
+        },
+
+        criarGrupo: async (
+          groupGame,
+          groupName,
+          groupOwner,
+          description,
+          members,
+          rank,
+        ) => {
+          firestore().collection('groups').add({
+            groupGame: groupGame,
+            groupName: groupName,
+            groupOwner: groupOwner,
+            description: description,
+            rank: rank,
+            members: [members],
+            rating: 0,
+          });
         },
       }}>
       {children}

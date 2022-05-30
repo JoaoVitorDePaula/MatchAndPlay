@@ -34,22 +34,6 @@ export default function TelaCriarGrupos({navigation}) {
       });
   };
 
-  const getGame = async () => {
-    const currentUser = await firestore()
-      .collection('games')
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(documentSnapshot => {
-          console.log(
-            'User ID: ',
-            documentSnapshot.id,
-            documentSnapshot.data(),
-          );
-          setGamesData(documentSnapshot.data());
-        });
-      });
-  };
-
   const getGames = () => {
     firestore()
       .collection('games')

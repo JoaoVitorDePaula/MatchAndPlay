@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "293016028359",
+    "project_id": "matchandplay-9b795",
+    "storage_bucket": "matchandplay-9b795.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293016028359:android:95da954cefe7c498a8eae2",
+        "android_client_info": {
+          "package_name": "com.matchandplay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293016028359-6pm4to6e6sn6vkvmpvidsn95n03fnb04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.matchandplay",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "293016028359-gg9oe6ggoj4avsc28pg2o6i57sv63hrt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqWQvisy9JgPcoDw4fhri0jefgDfqcTxc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293016028359-gg9oe6ggoj4avsc28pg2o6i57sv63hrt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

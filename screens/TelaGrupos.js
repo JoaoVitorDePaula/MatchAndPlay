@@ -24,39 +24,12 @@ export default function TelaGrupos({navigation}) {
 
   const {logout} = useContext(AuthContext);
 
-  const [myGroups, setMyGroups] = useState('');
+  const [groups, setGroups] = useState('');
 
   const [list, setList] = useState([]);
+  const [data, setData] = useState([]);
 
-  const MoverCriarGrupos = () => {
-    navigation.navigate('CriarGrupos');
-  };
-
-  const getMyGroups = () => {
-    firestore()
-      .collection('groups')
-      .get()
-      .then(querySnapshot => {
-        let d = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const group = {
-            description: documentSnapshot.description,
-            groupGame: documentSnapshot.data().groupGame,
-            groupName: documentSnapshot.data().groupName,
-            groupOwner: documentSnapshot.data().groupOwner,
-            members: documentSnapshot.data().members,
-            rank: documentSnapshot.data().rank,
-            rating: documentSnapshot.data().rating,
-          };
-          d.push(group);
-        });
-        console.log(d);
-        setList(d);
-      })
-      .catch(e => {
-        console.log('Erro, catch user' + e);
-      });
-  };
+  const [userData, setUserData] = useState(null);
 
   const renderItem = ({item}) => (
     <>
@@ -72,15 +45,66 @@ export default function TelaGrupos({navigation}) {
     </>
   );
 
+  const MoverCriarGrupos = () => {
+    navigation.navigate('CriarGrupos');
+  };
+
+  const getGroups = () => {
+    firestore()
+      .collection('groups')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        let a = user.uid;
+        let c = userData.userName;
+        querySnapshot.forEach(documentSnapshot => {
+          const group = {
+            description: documentSnapshot.description,
+            groupGame: documentSnapshot.data().groupGame,
+            groupName: documentSnapshot.data().groupName,
+            groupOwner: documentSnapshot.data().groupOwner,
+            members: documentSnapshot.data().members,
+            rank: documentSnapshot.data().rank,
+            rating: documentSnapshot.data().rating,
+          };
+          d.push(group);
+        });
+        setList(d);
+        setData(d.filter(item => item.groupOwner.indexOf(a) > -1));
+
+        console.log(c);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const getUser = async () => {
+    await firestore()
+      .collection('user')
+      .doc(route.params ? route.params.userId : user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          console.log('User Data', documentSnapshot.data());
+          setUserData(documentSnapshot.data());
+        }
+      });
+  };
+
+  let d = user.uid;
+
+  console.log(d);
+
   useFocusEffect(
     React.useCallback(() => {
-      getMyGroups();
+      getGroups(), getUser();
     }, []),
   );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <ScrollView>
+      <View>
         <View style={{alignItems: 'center', flexDirection: 'row'}}>
           <TouchableOpacity
             style={styles.btnSubmit}
@@ -94,17 +118,26 @@ export default function TelaGrupos({navigation}) {
           </TouchableOpacity>
         </View>
 
-        <ScrollView>
+        <View>
           <Text style={styles.meusGruposText}>MEUS GRUPOS</Text>
-          <View>
-            <FlatList
-              data={list}
-              renderItem={renderItem}
-              keyExtractor={item => item.groupName}
-            />
-          </View>
-        </ScrollView>
-      </ScrollView>
+          <FlatList
+            horizontal
+            data={data}
+            renderItem={renderItem}
+            keyExtractor={item => item.groupName}
+          />
+        </View>
+
+        <View>
+          <Text style={styles.meusGruposText}>GRUPOS QUE PARTICIPO</Text>
+          <FlatList
+            horizontal
+            data={list}
+            renderItem={renderItem}
+            keyExtractor={item => item.groupName}
+          />
+        </View>
+      </View>
     </SafeAreaView>
   );
 }

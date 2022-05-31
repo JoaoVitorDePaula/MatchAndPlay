@@ -134,7 +134,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
               onValueChange={(itemValue, itemIndex) => {
                 setSelectGame(itemValue), setRank(itemValue);
               }}>
-              <Picker.Item label="Selecione seu ranking" value="" />
+              <Picker.Item value="" label="Selecione seu ranking" enabled={false}/>
               {data.map(item => (
                 <Picker.Item label={item} key={item} value={item} />
               ))}

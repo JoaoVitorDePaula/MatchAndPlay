@@ -77,19 +77,17 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .doc(user.uid)
       .get()
       .then(querySnapshot => {
-        setInputMembers(querySnapshot.data().userName);
+        setInputMembers(user.uid);
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
   };
 
-  
-
   useFocusEffect(
     React.useCallback(() => {
       getGames(), getUser(), getNameGames(), getUserName();
-    }, [])
+    }, []),
   );
 
   return (
@@ -131,10 +129,14 @@ export default function TelaCriarGrupos2({navigation, route}) {
             <Picker
               style={[styles.inputText]}
               selectedValue={selectGame}
-              onValueChange={(itemValue, itemIndex) => {
+              onValueChange={itemValue => {
                 setSelectGame(itemValue), setRank(itemValue);
               }}>
-              <Picker.Item value="" label="Selecione seu ranking" enabled={false}/>
+              <Picker.Item
+                value=""
+                label="Selecione seu ranking"
+                enabled={false}
+              />
               {data.map(item => (
                 <Picker.Item label={item} key={item} value={item} />
               ))}

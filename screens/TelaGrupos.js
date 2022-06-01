@@ -1,20 +1,16 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
-  Image,
-  ScrollView,
   TouchableOpacity,
   Text,
   StyleSheet,
   Animated,
-  TextInput,
   FlatList,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import {useFocusEffect} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import {set} from 'react-native-reanimated';
 
 export default function TelaGrupos({navigation}) {
   const {user} = useContext(AuthContext);
@@ -29,7 +25,7 @@ export default function TelaGrupos({navigation}) {
   const [list, setList] = useState([]);
   const [data, setData] = useState([]);
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
 
   const renderItem = ({item}) => (
     <>
@@ -38,7 +34,7 @@ export default function TelaGrupos({navigation}) {
           <Text style={styles.grupoTitleText}>{item.groupName}</Text>
           <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
           <Text style={styles.grupoText}>Rank: {item.rank}</Text>
-          <Text style={styles.grupoText}>Tipo: {item.rank}</Text>
+          <Text style={styles.grupoText}>Tipo: Competitivo</Text>
           <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
         </View>
       </TouchableOpacity>
@@ -56,10 +52,10 @@ export default function TelaGrupos({navigation}) {
       .then(querySnapshot => {
         let d = [];
         let a = user.uid;
-        let c = userData.userName;
+
         querySnapshot.forEach(documentSnapshot => {
           const group = {
-            description: documentSnapshot.description,
+            description: documentSnapshot.data().description,
             groupGame: documentSnapshot.data().groupGame,
             groupName: documentSnapshot.data().groupName,
             groupOwner: documentSnapshot.data().groupOwner,
@@ -71,34 +67,30 @@ export default function TelaGrupos({navigation}) {
         });
         setList(d);
         setData(d.filter(item => item.groupOwner.indexOf(a) > -1));
-
-        console.log(c);
+        setGroups(d.filter(item => item.members.indexOf(user.uid) > -1));
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
   };
 
-  const getUser = async () => {
-    await firestore()
+  const getUser = () => {
+    firestore()
       .collection('user')
-      .doc(route.params ? route.params.userId : user.uid)
+      .doc(user.uid)
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
+          console.log('Dados do usuario', documentSnapshot.data().userName);
+          setUserData(documentSnapshot.data().userName);
         }
+        console.log('Nome do usuario', userData);
       });
   };
 
-  let d = user.uid;
-
-  console.log(d);
-
   useFocusEffect(
     React.useCallback(() => {
-      getGroups(), getUser();
+      getUser(), getGroups();
     }, []),
   );
 
@@ -132,7 +124,7 @@ export default function TelaGrupos({navigation}) {
           <Text style={styles.meusGruposText}>GRUPOS QUE PARTICIPO</Text>
           <FlatList
             horizontal
-            data={list}
+            data={groups}
             renderItem={renderItem}
             keyExtractor={item => item.groupName}
           />

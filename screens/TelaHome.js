@@ -2,15 +2,18 @@ import React, {useState, useEffect, useContext} from 'react';
 import {
   View,
   Image,
-  ScrollView,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
   StyleSheet,
   Animated,
-  TextInput,
+  FlatList,
+  ScrollView,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
+import firestore from '@react-native-firebase/firestore';
+import {useFocusEffect} from '@react-navigation/native';
+import {Picker} from '@react-native-picker/picker';
 
 export default function TelaHome({navigation}) {
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
@@ -18,176 +21,70 @@ export default function TelaHome({navigation}) {
 
   const {logout} = useContext(AuthContext);
 
-  const [inputBusca, setInputBusca] = useState('');
+  const [data, setData] = useState([]);
 
   const MoveBuscar = () => {
     navigation.navigate('Busca');
   };
 
-  useEffect(() => {
-  }, []);
+  const getGames = () => {
+    firestore()
+      .collection('games')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+            gameImage: documentSnapshot.data().gameImage,
+            gameName: documentSnapshot.data().gameName,
+          };
+          d.push(game);
+        });
+        setData(d);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const RenderItem = () => (
+    <>
+      {data.map((item, index) => (
+        <TouchableOpacity>
+          <Image
+            style={styles.jogosImage}
+            source={{
+              uri: item.gameImage,
+            }}
+          />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getGames();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <ScrollView>
       <View style={{alignItems: 'center'}}>
         <TouchableOpacity style={styles.btnSubmit} onPress={() => MoveBuscar()}>
           <Text style={styles.searchText}> Encontrar</Text>
         </TouchableOpacity>
-        
       </View>
       <View style={styles.container2}>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.meusJogosText}>JOGOS EM ALTA</Text>
           <Text style={styles.maisJogosText}>Ver mais</Text>
         </View>
-        <ScrollView horizontal={true}>
-          <View style={styles.containerJogos}>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/lol.jpeg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/PUBG.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/FORT.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/CSGO.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/APEX.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/VAVA.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/RB6.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/star.jpeg')}
-              />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        <View style={styles.containerJogos}></View>
       </View>
-      <View style={styles.container3}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.meusJogosText}>JOGOS CASUAIS</Text>
-          <Text style={styles.maisJogosText}>Ver mais</Text>
-        </View>
-        <ScrollView horizontal={true}>
-          <View style={styles.containerJogos}>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/MINE.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/TERRA.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/FLG.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/ROCKET.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/AUS.jpg')}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/BLL.jpg')}
-              />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-
-      <View style={styles.container4}>
-        
-          <Text style={styles.meusJogosText}>TOP 5 MOBILE</Text>
-        
-        <ScrollView horizontal={true}>
-          <View style={styles.containerJogos}>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/MBL.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/CODM.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/FF.jpg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/PUBGM.png')}
-              />
-            </TouchableOpacity>
-
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/AOV.jpg')}
-              />
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-      </View>
-
-      <View style={styles.container2}>
-        <TouchableOpacity style={styles.btnSubmit} onPress={() => logout()}>
-          <Text style={styles.submitText}> Sair</Text>
-        </TouchableOpacity>
-      </View>
+      <ScrollView horizontal={true}>
+        <RenderItem></RenderItem>
       </ScrollView>
     </SafeAreaView>
   );
@@ -201,8 +98,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#191919',
   },
   container: {
-    alignItems: 'center',
-    width: '90%',
+    width: '100%',
   },
   container2: {
     backgroundColor: '#1D1D1D',
@@ -274,9 +170,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 160,
     width: 110,
-    alignItems: 'center',
     marginLeft: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   inputText: {
     backgroundColor: '#363636',

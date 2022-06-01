@@ -27,7 +27,7 @@ const TelaBusca = ({navigation, route}) => {
   const renderItem = ({item}) => (
     <>
       <TouchableOpacity
-        style={styles.userBox}
+        style={styles.profileBox}
         onPress={() =>
           navigation.navigate('TelaVisualizarPerfil', {
             userName: item.userName,
@@ -98,22 +98,20 @@ const TelaBusca = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container1}>
-        <TextInput
-          style={styles.inputText}
-          placeholder="Procurando por alguém?"
-          placeholderTextColor="#C0C0C0"
-          autoCorrect={false}
-          color="#EEEEEE"
-          value={searchText}
-          onChangeText={t => setSearchText(t)}
-        />
-        <FlatList
-          data={list}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-        />
-      </ScrollView>
+      <TextInput
+        style={styles.inputText}
+        placeholder="Procurando por alguém?"
+        placeholderTextColor="#C0C0C0"
+        autoCorrect={false}
+        color="#EEEEEE"
+        value={searchText}
+        onChangeText={t => setSearchText(t)}
+      />
+      <FlatList
+        data={list}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+      />
     </SafeAreaView>
   );
 };
@@ -125,7 +123,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: '#191919',
-    alignItems: 'center',
   },
   container1: {
     width: '100%',
@@ -156,7 +153,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     marginLeft: '5%',
   },
-  userBox: {
+  profileBox: {
     backgroundColor: '#363636',
     borderWidth: 1,
     borderColor: '#363636',
@@ -173,6 +170,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     padding: 10,
     marginBottom: 17,
+    marginTop: 10,
   },
   btnSubmit: {
     backgroundColor: '#492BB3',

@@ -22,6 +22,7 @@ export default function TelaHome({navigation}) {
   const {logout} = useContext(AuthContext);
 
   const [data, setData] = useState([]);
+  const [dataMobile, setDataMobile] = useState([]);
 
   const MoveBuscar = () => {
     navigation.navigate('Busca');
@@ -48,9 +49,48 @@ export default function TelaHome({navigation}) {
       });
   };
 
+  const getMobilieGames = () => {
+    firestore()
+      .collection('games')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        let a = 'Mobile';
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+            gameImage: documentSnapshot.data().gameImage,
+            gameName: documentSnapshot.data().gameName,
+            platforms: documentSnapshot.data().platforms,
+          };
+          d.push(game);
+        });
+        setData(d);
+        setDataMobile(d.filter(item => item.platforms.indexOf(a) > -1));
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
   const RenderItem = () => (
     <>
-      {data.map((item, index) => (
+      {data.map(item => (
+        <TouchableOpacity>
+          <Image
+            style={styles.jogosImage}
+            source={{
+              uri: item.gameImage,
+            }}
+          />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
+
+  const RenderItemMobile = () => (
+    <>
+      {dataMobile.map(item => (
         <TouchableOpacity>
           <Image
             style={styles.jogosImage}
@@ -65,7 +105,7 @@ export default function TelaHome({navigation}) {
 
   useFocusEffect(
     React.useCallback(() => {
-      getGames();
+      getGames(), getMobilieGames();
     }, []),
   );
 
@@ -76,16 +116,30 @@ export default function TelaHome({navigation}) {
           <Text style={styles.searchText}> Encontrar</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.container2}>
         <View style={{flexDirection: 'row'}}>
           <Text style={styles.meusJogosText}>JOGOS EM ALTA</Text>
           <Text style={styles.maisJogosText}>Ver mais</Text>
         </View>
-        <View style={styles.containerJogos}></View>
       </View>
-      <ScrollView horizontal={true}>
-        <RenderItem></RenderItem>
-      </ScrollView>
+      <View style={styles.containerJogos}>
+        <ScrollView horizontal={true}>
+          <RenderItem></RenderItem>
+        </ScrollView>
+      </View>
+
+      <View style={styles.container2}>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.meusJogosText}>TOP MOBILE</Text>
+          <Text style={styles.maisJogosText}> Ver mais</Text>
+        </View>
+      </View>
+      <View style={styles.containerJogos}>
+        <ScrollView horizontal={true}>
+          <RenderItemMobile></RenderItemMobile>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -102,7 +156,6 @@ const styles = StyleSheet.create({
   },
   container2: {
     backgroundColor: '#1D1D1D',
-    alignItems: 'center',
   },
   container3: {
     alignItems: 'center',
@@ -133,24 +186,6 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
   },
-  registerText: {
-    color: '#35AAFF',
-  },
-  userImg: {
-    width: 120,
-    height: 120,
-    borderRadius: 100,
-    marginTop: '7%',
-  },
-  btnEditar: {},
-  registerText: {
-    color: '#35AAFF',
-    fontSize: 20,
-  },
-  boxAddGame: {
-    fontSize: 100,
-    color: '#363636',
-  },
   meusJogosText: {
     color: '#FFF',
     fontSize: 18,
@@ -172,13 +207,5 @@ const styles = StyleSheet.create({
     width: 110,
     marginLeft: 10,
     marginBottom: 20,
-  },
-  inputText: {
-    backgroundColor: '#363636',
-    width: '90%',
-    color: '#222',
-    fontSize: 17,
-    borderRadius: 7,
-    padding: 10,
   },
 });

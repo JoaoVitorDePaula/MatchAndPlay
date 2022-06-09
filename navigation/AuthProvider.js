@@ -61,6 +61,9 @@ export const AuthProvider = ({children}) => {
                     platforms: [],
                     userImage: null,
                     userName: '',
+                    favoriteGames: [],
+                    followers: 0,
+                    following: 0,
                   })
                   .catch(error => {
                     console.log(
@@ -97,9 +100,11 @@ export const AuthProvider = ({children}) => {
                     bio: '',
                     email: email,
                     name: '',
-                    platforms: [],
                     userImage: null,
                     userName: '',
+                    favoriteGames: [],
+                    followers: 0,
+                    following: 0,
                   })
                   .catch(error => {
                     console.log('Algo deu errado:', error);
@@ -141,15 +146,17 @@ export const AuthProvider = ({children}) => {
           members,
           rank,
         ) => {
-          firestore().collection('groups').add({
-            groupGame: groupGame,
-            groupName: groupName,
-            groupOwner: groupOwner,
-            description: description,
-            rank: rank,
-            members: [members],
-            rating: 0,
-          });
+          firestore()
+            .collection('groups')
+            .add({
+              groupGame: groupGame,
+              groupName: groupName,
+              groupOwner: groupOwner,
+              description: description,
+              rank: rank,
+              members: [members],
+              rating: 0,
+            });
         },
       }}>
       {children}

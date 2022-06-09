@@ -11,6 +11,7 @@ import TelaEditarPerfil from '../screens/TelaEditarPerfil';
 import TelaBusca from '../screens/TelaBusca';
 import TelaGrupos from '../screens/TelaGrupos';
 import TelaVisualizarPerfil from '../screens/TelaVisualizarPerfil';
+import TelaVisualizarJogos from '../screens/TelaVisualizarJogos';
 
 
 const Stack = createStackNavigator();
@@ -42,6 +43,15 @@ const FeedStack = ({navigation}) => (
       component={TelaVisualizarPerfil}
       options={{
         title: 'Visualizar Perfil',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+    <Stack.Screen
+      name="TelaVisualizarJogos"
+      component={TelaVisualizarJogos}
+      options={{
+        title: 'Jogo',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}

@@ -30,8 +30,12 @@ const TelaBusca = ({navigation, route}) => {
         style={styles.profileBox}
         onPress={() =>
           navigation.navigate('TelaVisualizarPerfil', {
+            userId: item.id,
             userName: item.userName,
             bio: item.bio,
+            favoriteGames: item.favoriteGames,
+            followers: item.followers,
+            following: item.following,
           })
         }>
         <View style={{flexDirection: 'row'}}>
@@ -56,7 +60,7 @@ const TelaBusca = ({navigation, route}) => {
       .get()
       .then(querySnapshot => {
         let d = [];
-        console.log('Total users: ', querySnapshot.size);
+        //console.log('Total users: ', querySnapshot.size);
 
         querySnapshot.forEach(documentSnapshot => {
           const user = {
@@ -65,12 +69,14 @@ const TelaBusca = ({navigation, route}) => {
             email: documentSnapshot.data().email,
             userName: documentSnapshot.data().userName,
             bio: documentSnapshot.data().bio,
-            platforms: documentSnapshot.data().platforms,
+            favoriteGames: documentSnapshot.data().favoriteGames,
             userImage: documentSnapshot.data().userImage,
+            followers: documentSnapshot.data().followers,
+            following: documentSnapshot.data().following,
           };
           d.push(user);
         });
-        console.log(d);
+        //console.log(d);
         setData(d);
         setList(d);
       })

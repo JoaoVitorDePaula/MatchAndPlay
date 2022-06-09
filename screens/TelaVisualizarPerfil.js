@@ -9,32 +9,28 @@ import {
   Text,
   RefreshControl,
 } from 'react-native';
-import {Avatar, Title, Caption, TouchableRipple} from 'react-native-paper';
+import {
+  Avatar,
+  Title,
+  Caption,
+  TouchableRipple,
+  Button,
+} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
+import {useFocusEffect} from '@react-navigation/native';
 
 const TelaVisualizarPerfil = ({navigation, route}) => {
   const {logout} = useContext(AuthContext);
   const {user} = useContext(AuthContext);
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
 
   const [update, setUpdade] = useState(false);
 
-  const whenUpdate = () => {
-    setUpdade(true);
-    setTimeout(
-      () => {
-        setUpdade(false);
-      },
-      1000,
-      getUser(),
-    );
-  };
-
-
+  const [isFollowing, setIsFollowing] = useState();
 
   const getUser = async () => {
     await firestore()
@@ -43,23 +39,99 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data());
+          //console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
       });
   };
 
+  const getIsFollowing = async () => {
+    await firestore()
+      .collection('user')
+      .doc(user.uid)
+      .collection('following')
+      .doc(route.params.userId)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setIsFollowing(true);
+        } else {
+          setIsFollowing(false);
+        }
+      });
+  };
+
+  const changeFollowState = async () => {
+    if (isFollowing) {
+      await firestore()
+        .collection('user')
+        .doc(user.uid)
+        .collection('following')
+        .doc(route.params.userId)
+        .delete()
+        .then();
+    } else {
+      await firestore()
+        .collection('user')
+        .doc(user.uid)
+        .collection('following')
+        .doc(route.params.userId)
+        .set({})
+        .then();
+    }
+  };
+
+  const RenderFollowButton = () => {
+    if (isFollowing) {
+      return (
+        <View style={{flexDirection: 'row'}}>
+          <TouchableOpacity style={styles.btnSeguir}>
+            <Text style={styles.registerText}>Mensagem</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btnSeguir}
+            onPress={() => changeFollowState()}>
+            <Text style={styles.registerText}>Deixa de seguir</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      return (
+        <TouchableOpacity
+          style={styles.btnSeguir}
+          onPress={() => changeFollowState()}>
+          <Text style={styles.registerText}>Seguir</Text>
+        </TouchableOpacity>
+      );
+    }
+  };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser(), getIsFollowing();
+    }, []),
+  );
+
   useEffect(() => {
-    getUser();
+    const subscribe = firestore()
+      .collection('user')
+      .doc(user.uid)
+      .collection('following')
+      .doc(route.params.userId)
+      .onSnapshot(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setIsFollowing(true);
+        } else {
+          setIsFollowing(false);
+        }
+      });
+    return () => subscribe();
   }, []);
 
+  
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={update} onRefresh={whenUpdate} />
-        }>
+      <ScrollView style={styles.container}>
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
@@ -74,14 +146,15 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
             </Text>
             <Caption style={styles.captionText}>
               {' '}
-              {route.params ? route.params.bio : 'Ainda não há nome'}{' '}
+              {route.params ? route.params.id : 'Ainda não há nome'}{' '}
             </Caption>
-            <Text style={styles.userText}>
-              {' '}
-              {route.params ? route.params.email : 'Ainda não há nome'}
-            </Text>
           </View>
         </View>
+
+        <View style={{alignItems: 'center'}}>
+          <RenderFollowButton />
+        </View>
+
         <View style={styles.infoBoxWrapper}>
           <View
             style={[
@@ -91,14 +164,15 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
                 borderRightWidth: 1,
               },
             ]}>
-            <Title style={styles.boxText}>323</Title>
+            <Title style={styles.boxText}>{route.params.followers}</Title>
             <Caption style={styles.captionText}>Seguidores</Caption>
           </View>
           <View style={styles.infoBox}>
-            <Title style={styles.boxText}>458</Title>
+            <Title style={styles.boxText}>{route.params.following}</Title>
             <Caption style={styles.captionText}>Seguindo</Caption>
           </View>
         </View>
+
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons
             style={styles.IconContact}
@@ -167,24 +241,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: '3%',
   },
-  btnSubmit: {
-    backgroundColor: '#35AAFF',
-    width: '38%',
-    height: 45,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 7,
-    marginTop: '5%',
-    marginLeft: '5%',
-  },
+
   submitText: {
     color: '#FFF',
     fontSize: 15,
     color: '#777777',
     marginLeft: '5%',
-  },
-  registerText: {
-    color: '#35AAFF',
   },
   userImg: {
     marginRight: '5%',
@@ -192,10 +254,28 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginBottom: '5%',
   },
-  btnEditar: {},
+  btnSeguir: {
+    width: '38%',
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '5%',
+    borderBottomColor: '#FFF',
+    borderBottomWidth: 1,
+    borderTopColor: '#FFF',
+    borderTopWidth: 1,
+    borderLeftColor: '#fff',
+    borderLeftWidth: 1,
+    borderRightColor: '#fff',
+    borderRightWidth: 1,
+    borderRadius: 4,
+    marginRight: '1%',
+    marginLeft: '1%',
+  },
+
   registerText: {
-    color: '#35AAFF',
-    fontSize: 20,
+    color: '#FFF',
+    fontSize: 15,
   },
   userText: {
     color: '#FFF',
@@ -266,6 +346,6 @@ const styles = StyleSheet.create({
     width: 110,
     alignItems: 'center',
     marginLeft: 20,
-    marginBottom: "5%",
+    marginBottom: '5%',
   },
 });

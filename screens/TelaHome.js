@@ -15,10 +15,7 @@ import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
 import {Picker} from '@react-native-picker/picker';
 
-export default function TelaHome({navigation}) {
-  const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
-  const [opacity] = useState(new Animated.Value(0));
-
+const TelaHome = ({navigation, route}) => {
   const {logout} = useContext(AuthContext);
 
   const [data, setData] = useState([]);
@@ -62,6 +59,8 @@ export default function TelaHome({navigation}) {
             gameImage: documentSnapshot.data().gameImage,
             gameName: documentSnapshot.data().gameName,
             platforms: documentSnapshot.data().platforms,
+            description: documentSnapshot.data().description,
+            followers: documentSnapshot.data().followers,
           };
           d.push(game);
         });
@@ -75,8 +74,19 @@ export default function TelaHome({navigation}) {
 
   const RenderItem = () => (
     <>
-      {data.map(item => (
-        <TouchableOpacity>
+      {data.map((item, index) => (
+        <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('TelaVisualizarJogos', {
+            id: item.id,
+            gameImage:item.gameImage,
+            gameName:item.gameName,
+            platforms: item.platforms,
+            description: item.description,
+            followers: item.followers,
+          })
+        }
+        key={index}>
           <Image
             style={styles.jogosImage}
             source={{
@@ -90,8 +100,19 @@ export default function TelaHome({navigation}) {
 
   const RenderItemMobile = () => (
     <>
-      {dataMobile.map(item => (
-        <TouchableOpacity>
+      {dataMobile.map((item, index) => (
+        <TouchableOpacity 
+        onPress={() =>
+          navigation.navigate('TelaVisualizarJogos', {
+            id: item.id,
+            gameImage:item.gameImage,
+            gameName:item.gameName,
+            platforms: item.platforms,
+            description: item.description,
+            followers: item.followers,
+          })
+        }
+        key={index}>
           <Image
             style={styles.jogosImage}
             source={{
@@ -103,11 +124,9 @@ export default function TelaHome({navigation}) {
     </>
   );
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getGames(), getMobilieGames();
-    }, []),
-  );
+  useEffect(() => {
+    getGames(), getMobilieGames();
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
@@ -136,13 +155,23 @@ export default function TelaHome({navigation}) {
         </View>
       </View>
       <View style={styles.containerJogos}>
-        <ScrollView horizontal={true}>
-          <RenderItemMobile></RenderItemMobile>
-        </ScrollView>
+        <TouchableOpacity>
+          <ScrollView horizontal={true}>
+            <RenderItemMobile />
+          </ScrollView>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.container2}>
+        <TouchableOpacity style={styles.btnSubmit} onPress={() => logout()}>
+          <Text style={styles.submitText}> Sair</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
-}
+};
+
+export default TelaHome;
 
 const styles = StyleSheet.create({
   background: {

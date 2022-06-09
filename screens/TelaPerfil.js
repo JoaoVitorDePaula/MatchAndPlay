@@ -17,12 +17,16 @@ import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
 
 const TelaPerfil = ({navigation, route}) => {
-  const {logout} = useContext(AuthContext);
+
   const {user} = useContext(AuthContext);
 
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
 
   const [update, setUpdade] = useState(false);
+
+  const [following, setFollowing] = useState(0);
+
+
 
   const whenUpdate = () => {
     setUpdade(true);
@@ -41,16 +45,28 @@ const TelaPerfil = ({navigation, route}) => {
       .doc(route.params ? route.params.userId : user.uid)
       .get()
       .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
+        documentSnapshot.exists
           console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
-        }
       });
+  };
+
+  const getIsFollowing = async () => {
+    await firestore()
+      .collection('user')
+      .doc(user.uid)
+      .collection('following')
+      .get()
+      .then(({size}) => {
+          console.log('Seguidores',size);
+          setFollowing(size)
+        }
+      );
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser();
+      getUser(), getIsFollowing();
     }, [])
   );
 
@@ -64,7 +80,9 @@ const TelaPerfil = ({navigation, route}) => {
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
-            source={require('../src/assets/FotoPerfil.jpeg')}
+            source={{
+              uri: userData.userImage,
+            }}
             size={90}
           />
           <View style={{flexDirection: 'column-reverse'}}></View>
@@ -74,9 +92,9 @@ const TelaPerfil = ({navigation, route}) => {
             </Text>
             <Caption style={styles.captionText}>
               {' '}
-              {userData ? userData.bio : 'Ainda não há nada aqui'}{' '}
+              {userData ? userData.bio : 'Ainda não há nada aqui'}
             </Caption>
-          </View>
+          </View> 
         </View>
         <View style={styles.infoBoxWrapper}>
           <View
@@ -91,7 +109,7 @@ const TelaPerfil = ({navigation, route}) => {
             <Caption style={styles.captionText}>Seguidores</Caption>
           </View>
           <View style={styles.infoBox}>
-            <Title style={styles.boxText}>458</Title>
+            <Title style={styles.boxText}>{following}</Title>
             <Caption style={styles.captionText}>Seguindo</Caption>
           </View>
         </View>

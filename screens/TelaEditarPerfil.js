@@ -16,6 +16,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {useFocusEffect} from '@react-navigation/native';
 
 export default function TelaEditarPerfil({navigation}) {
   const {user} = useContext(AuthContext);
@@ -32,6 +33,12 @@ export default function TelaEditarPerfil({navigation}) {
 
   const [userData, setUserData] = useState(null);
 
+  const [userImage, setUserImage] = useState();
+
+  const MoveSelecionarFoto = () => {
+    navigation.navigate('TelaSelecionarFotoPerfil');
+  };
+
   const getUser = async () => {
     const currentUser = await firestore()
       .collection('user')
@@ -42,6 +49,16 @@ export default function TelaEditarPerfil({navigation}) {
           console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
+      });
+  };
+
+  const getProfileImage = () => {
+    firestore()
+      .collection('user')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        setUserImage(documentSnapshot.data().userImage);
       });
   };
 
@@ -64,26 +81,31 @@ export default function TelaEditarPerfil({navigation}) {
       });
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser(),getProfileImage();
+    }, []),
+  );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
       <ScrollView>
         <View style={{alignItems: 'center'}}>
-          <TouchableOpacity onPress={() => ''}>
+          <TouchableOpacity onPress={() => MoveSelecionarFoto()}>
             <View
               style={{
                 height: 100,
                 width: 100,
-                borderRadius: 15,
+                borderRadius: 100,
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginTop: '5%',
+                backgroundColor: 'rgba(255, 255, 255,0.4)'
               }}>
               <ImageBackground
-                source={require('../src/assets/FotoPerfil.jpeg')}
+                source={{
+                  uri: userImage,
+                }}
                 style={{height: 100, width: 100}}
                 imageStyle={{borderRadius: 100}}>
                 <View
@@ -94,15 +116,16 @@ export default function TelaEditarPerfil({navigation}) {
                   }}>
                   <Icon
                     name="camera"
-                    size={35}
-                    color="#fff"
+                    size={40}
+                    color="#000"
                     style={{
-                      opacity: 0.7,
                       alignItems: 'center',
                       justifyContent: 'center',
                       borderWidth: 1,
-                      borderColor: '#fff',
+                      borderColor: '#000',
                       borderRadius: 10,
+                      backgroundColor:'rgba(255,255,255,0.3)',
+                      
                     }}
                   />
                 </View>

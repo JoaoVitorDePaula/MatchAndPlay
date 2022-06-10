@@ -135,7 +135,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
-            source={require('../src/assets/FotoPerfil.jpeg')}
+            
             size={90}
           />
           <View style={{flexDirection: 'column-reverse'}}></View>
@@ -200,18 +200,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
         <View style={styles.container2}>
           <Text style={styles.meusJogosText}>Meus Jogos</Text>
           <View style={styles.containerJogos}>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/lol.jpeg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/star.jpeg')}
-              />
-            </TouchableOpacity>
+            
           </View>
         </View>
       </ScrollView>

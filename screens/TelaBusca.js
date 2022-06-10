@@ -34,14 +34,15 @@ const TelaBusca = ({navigation, route}) => {
             userName: item.userName,
             bio: item.bio,
             favoriteGames: item.favoriteGames,
-            followers: item.followers,
-            following: item.following,
+            userImage: item.userImage,
           })
         }>
         <View style={{flexDirection: 'row'}}>
           <Avatar.Image
             style={styles.userImg}
-            source={require('../src/assets/FotoPerfil.jpeg')}
+            source={{
+              uri: item.userImage,
+            }}
             size={60}
           />
           <View>
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   userImg: {
     margin: '3%',
     marginLeft: '7%',
-  },
+    backgroundColor: 'rgba(255, 255, 255,0.1)',  },
   userText: {
     color: '#FFF',
     fontSize: 20,

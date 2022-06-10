@@ -12,6 +12,7 @@ import TelaBusca from '../screens/TelaBusca';
 import TelaGrupos from '../screens/TelaGrupos';
 import TelaVisualizarPerfil from '../screens/TelaVisualizarPerfil';
 import TelaVisualizarJogos from '../screens/TelaVisualizarJogos';
+import TelaSelecionarFotoPerfil from '../screens/TelaSelecionarFotoPerfil';
 
 
 const Stack = createStackNavigator();
@@ -84,6 +85,15 @@ const ProfileStack = ({navigation}) => (
       component={TelaEditarPerfil}
       options={{
         title: 'Editar Perfil',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+    <Stack.Screen
+      name="TelaSelecionarFotoPerfil"
+      component={TelaSelecionarFotoPerfil}
+      options={{
+        title: 'Selecione sua foto perfil',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}

@@ -103,8 +103,6 @@ export const AuthProvider = ({children}) => {
                     userImage: null,
                     userName: '',
                     favoriteGames: [],
-                    followers: 0,
-                    following: 0,
                   })
                   .catch(error => {
                     console.log('Algo deu errado:', error);

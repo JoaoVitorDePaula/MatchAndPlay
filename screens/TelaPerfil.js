@@ -147,18 +147,6 @@ const TelaPerfil = ({navigation, route}) => {
                 <Text style={styles.boxAddGame}>+</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/lol.jpeg')}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                style={styles.jogosImage}
-                source={require('../src/assets/Games/star.jpeg')}
-              />
-            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -212,6 +200,8 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginTop: '5%',
     marginBottom: '5%',
+    backgroundColor: 'rgba(255, 255, 255,0.3)',
+    
   },
   btnEditar: {},
   registerText: {

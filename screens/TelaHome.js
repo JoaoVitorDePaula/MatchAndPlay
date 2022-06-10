@@ -109,7 +109,6 @@ const TelaHome = ({navigation, route}) => {
             gameName:item.gameName,
             platforms: item.platforms,
             description: item.description,
-            followers: item.followers,
           })
         }
         key={index}>

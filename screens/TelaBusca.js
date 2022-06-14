@@ -8,10 +8,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {Avatar, Title, Caption, TouchableRipple} from 'react-native-paper';
+import {Avatar} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
+import {firebase} from '@react-native-firebase/auth';
 
 const TelaBusca = ({navigation, route}) => {
   const {user} = useContext(AuthContext);
@@ -58,11 +59,10 @@ const TelaBusca = ({navigation, route}) => {
   const getUser = () => {
     firestore()
       .collection('user')
+      .where(firebase.firestore.FieldPath.documentId(), "!=", user.uid)
       .get()
       .then(querySnapshot => {
         let d = [];
-        //console.log('Total users: ', querySnapshot.size);
-
         querySnapshot.forEach(documentSnapshot => {
           const user = {
             id: documentSnapshot.id,
@@ -72,8 +72,6 @@ const TelaBusca = ({navigation, route}) => {
             bio: documentSnapshot.data().bio,
             favoriteGames: documentSnapshot.data().favoriteGames,
             userImage: documentSnapshot.data().userImage,
-            followers: documentSnapshot.data().followers,
-            following: documentSnapshot.data().following,
           };
           d.push(user);
         });
@@ -118,6 +116,8 @@ const TelaBusca = ({navigation, route}) => {
         data={list}
         renderItem={renderItem}
         keyExtractor={item => item.id}
+        windowSize={1}
+        initialNumToRender={6}
       />
     </SafeAreaView>
   );

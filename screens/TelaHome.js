@@ -20,6 +20,7 @@ const TelaHome = ({navigation, route}) => {
 
   const [data, setData] = useState([]);
   const [dataMobile, setDataMobile] = useState([]);
+  const [dataPC, setDataPC] = useState([]);
 
   const MoveBuscar = () => {
     navigation.navigate('Busca');
@@ -36,6 +37,8 @@ const TelaHome = ({navigation, route}) => {
             id: documentSnapshot.id,
             gameImage: documentSnapshot.data().gameImage,
             gameName: documentSnapshot.data().gameName,
+            platforms: documentSnapshot.data().platforms,
+            description: documentSnapshot.data().description,
           };
           d.push(game);
         });
@@ -53,6 +56,7 @@ const TelaHome = ({navigation, route}) => {
       .then(querySnapshot => {
         let d = [];
         let a = 'Mobile';
+        
         querySnapshot.forEach(documentSnapshot => {
           const game = {
             id: documentSnapshot.id,
@@ -60,12 +64,34 @@ const TelaHome = ({navigation, route}) => {
             gameName: documentSnapshot.data().gameName,
             platforms: documentSnapshot.data().platforms,
             description: documentSnapshot.data().description,
-            followers: documentSnapshot.data().followers,
           };
           d.push(game);
         });
-        setData(d);
-        setDataMobile(d.filter(item => item.platforms.indexOf(a) > -1));
+        setDataMobile(d.filter(item => item.platforms.indexOf(a) >- 1));
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const getPCGames = () => {
+    firestore()
+      .collection('games')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        let b = 'PC';
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+            gameImage: documentSnapshot.data().gameImage,
+            gameName: documentSnapshot.data().gameName,
+            platforms: documentSnapshot.data().platforms,
+            description: documentSnapshot.data().description,
+          };
+          d.push(game);
+        });
+        setDataPC(d.filter(item => item.platforms.indexOf(b) > -1));
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -76,17 +102,19 @@ const TelaHome = ({navigation, route}) => {
     <>
       {data.map((item, index) => (
         <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('TelaVisualizarJogos', {
-            id: item.id,
-            gameImage:item.gameImage,
-            gameName:item.gameName,
-            platforms: item.platforms,
-            description: item.description,
-            followers: item.followers,
-          })
-        }
-        key={index}>
+          windowSize={1}
+          initialNumToRender={1}
+          onPress={() =>
+            navigation.navigate('TelaVisualizarJogos', {
+              id: item.id,
+              gameImage: item.gameImage,
+              gameName: item.gameName,
+              platforms: item.platforms,
+              description: item.description,
+              followers: item.followers,
+            })
+          }
+          key={index}>
           <Image
             style={styles.jogosImage}
             source={{
@@ -101,17 +129,46 @@ const TelaHome = ({navigation, route}) => {
   const RenderItemMobile = () => (
     <>
       {dataMobile.map((item, index) => (
-        <TouchableOpacity 
-        onPress={() =>
-          navigation.navigate('TelaVisualizarJogos', {
-            id: item.id,
-            gameImage:item.gameImage,
-            gameName:item.gameName,
-            platforms: item.platforms,
-            description: item.description,
-          })
-        }
-        key={index}>
+        <TouchableOpacity
+          windowSize={1}
+          initialNumToRender={1}
+          onPress={() =>
+            navigation.navigate('TelaVisualizarJogos', {
+              id: item.id,
+              gameImage: item.gameImage,
+              gameName: item.gameName,
+              platforms: item.platforms,
+              description: item.description,
+            })
+          }
+          key={index}>
+          <Image
+            style={styles.jogosImage}
+            source={{
+              uri: item.gameImage,
+            }}
+          />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
+
+  const RenderItemPC = () => (
+    <>
+      {dataPC.map((item, index) => (
+        <TouchableOpacity
+          windowSize={1}
+          initialNumToRender={1}
+          onPress={() =>
+            navigation.navigate('TelaVisualizarJogos', {
+              id: item.id,
+              gameImage: item.gameImage,
+              gameName: item.gameName,
+              platforms: item.platforms,
+              description: item.description,
+            })
+          }
+          key={index}>
           <Image
             style={styles.jogosImage}
             source={{
@@ -124,48 +181,66 @@ const TelaHome = ({navigation, route}) => {
   );
 
   useEffect(() => {
-    getGames(), getMobilieGames();
+    getGames(), getMobilieGames(), getPCGames();
   }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <View style={{alignItems: 'center'}}>
-        <TouchableOpacity style={styles.btnSubmit} onPress={() => MoveBuscar()}>
-          <Text style={styles.searchText}> Encontrar</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.container2}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.meusJogosText}>JOGOS EM ALTA</Text>
-          <Text style={styles.maisJogosText}>Ver mais</Text>
+      <ScrollView>
+        <View style={{alignItems: 'center'}}>
+          <TouchableOpacity
+            style={styles.btnSubmit}
+            onPress={() => MoveBuscar()}>
+            <Text style={styles.searchText}> Buscar Jogadores</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.containerJogos}>
-        <ScrollView horizontal={true}>
-          <RenderItem></RenderItem>
-        </ScrollView>
-      </View>
 
-      <View style={styles.container2}>
-        <View style={{flexDirection: 'row'}}>
-          <Text style={styles.meusJogosText}>TOP MOBILE</Text>
-          <Text style={styles.maisJogosText}> Ver mais</Text>
+        <View style={styles.container2}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.meusJogosText}>JOGOS EM ALTA</Text>
+            <Text style={styles.maisJogosText}>Ver mais</Text>
+          </View>
         </View>
-      </View>
-      <View style={styles.containerJogos}>
-        <TouchableOpacity>
+        <View style={styles.containerJogos}>
           <ScrollView horizontal={true}>
-            <RenderItemMobile />
+            <RenderItem></RenderItem>
           </ScrollView>
-        </TouchableOpacity>
-      </View>
+        </View>
 
-      <View style={styles.container2}>
-        <TouchableOpacity style={styles.btnSubmit} onPress={() => logout()}>
-          <Text style={styles.submitText}> Sair</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.container2}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.meusJogosText}>TOP MOBILE</Text>
+            <Text style={styles.maisJogosText}> Ver mais</Text>
+          </View>
+        </View>
+        <View style={styles.containerJogos}>
+          <TouchableOpacity>
+            <ScrollView horizontal={true}>
+              <RenderItemMobile/>
+            </ScrollView>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.container2}>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.meusJogosText}>TOP JOGOS PC</Text>
+            <Text style={styles.maisJogosText}> Ver mais</Text>
+          </View>
+        </View>
+        <View style={styles.containerJogos}>
+          <TouchableOpacity>
+            <ScrollView horizontal={true}>
+              <RenderItemPC/>
+            </ScrollView>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.container2}>
+          <TouchableOpacity style={styles.btnSubmit} onPress={() => logout()}>
+            <Text style={styles.submitText}> Sair</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -197,7 +272,7 @@ const styles = StyleSheet.create({
   },
   btnSubmit: {
     backgroundColor: '#492BB3',
-    width: '38%',
+    width: '45%',
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',

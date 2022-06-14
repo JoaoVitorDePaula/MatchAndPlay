@@ -11,6 +11,7 @@ import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import {useFocusEffect} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
+import {firebase} from '@react-native-firebase/auth';
 
 export default function TelaGrupos({navigation}) {
   const {user} = useContext(AuthContext);
@@ -48,6 +49,7 @@ export default function TelaGrupos({navigation}) {
   const getGroups = () => {
     firestore()
       .collection('groups')
+      //.where("{members[0]}", "!=", user.uid)
       .get()
       .then(querySnapshot => {
         let d = [];

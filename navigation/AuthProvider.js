@@ -58,12 +58,8 @@ export const AuthProvider = ({children}) => {
                     bio: '',
                     email: auth().currentUser.email,
                     name: '',
-                    platforms: [],
-                    userImage: null,
+                    userImage: 'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
                     userName: '',
-                    favoriteGames: [],
-                    followers: 0,
-                    following: 0,
                   })
                   .catch(error => {
                     console.log(
@@ -100,9 +96,8 @@ export const AuthProvider = ({children}) => {
                     bio: '',
                     email: email,
                     name: '',
-                    userImage: null,
+                    userImage: 'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
                     userName: '',
-                    favoriteGames: [],
                   })
                   .catch(error => {
                     console.log('Algo deu errado:', error);

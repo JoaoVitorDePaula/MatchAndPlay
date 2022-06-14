@@ -32,6 +32,12 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
 
   const [isFollowing, setIsFollowing] = useState();
 
+  const [following, setFollowing] = useState(0);
+
+  const [isFollowed, setIsFollowed] = useState();
+
+  const [followed, setFollowed] = useState(0);
+
   const getUser = async () => {
     await firestore()
       .collection('user')
@@ -48,7 +54,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
   const getIsFollowing = async () => {
     await firestore()
       .collection('user')
-      .doc(user.uid)
+      .doc()
       .collection('following')
       .doc(route.params.userId)
       .get()
@@ -57,6 +63,22 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           setIsFollowing(true);
         } else {
           setIsFollowing(false);
+        }
+      });
+  };
+
+  const getIsFollowed = async () => {
+    await firestore()
+      .collection('user')
+      .doc()
+      .collection('followed')
+      .doc(user.uid)
+      .get()
+      .then(documentSnapshot => {
+        if (documentSnapshot.exists) {
+          setIsFollowed(true);
+        } else {
+          setIsFollowed(false);
         }
       });
   };
@@ -81,6 +103,26 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
     }
   };
 
+  const changeFollowState2 = async () => {
+    if (isFollowed) {
+      await firestore()
+        .collection('user')
+        .doc(route.params.userId)
+        .collection('followed')
+        .doc(user.uid)
+        .delete()
+        .then();
+    } else {
+      await firestore()
+        .collection('user')
+        .doc(route.params.userId)
+        .collection('followed')
+        .doc(user.uid)
+        .set({})
+        .then();
+    }
+  };
+
   const RenderFollowButton = () => {
     if (isFollowing) {
       return (
@@ -90,7 +132,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnSeguir}
-            onPress={() => changeFollowState()}>
+            onPress={() => [changeFollowState(), changeFollowState2()]}>
             <Text style={styles.registerText}>Deixa de seguir</Text>
           </TouchableOpacity>
         </View>
@@ -99,43 +141,95 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       return (
         <TouchableOpacity
           style={styles.btnSeguir}
-          onPress={() => changeFollowState()}>
+          onPress={() => [changeFollowState(), changeFollowState2()]}>
           <Text style={styles.registerText}>Seguir</Text>
         </TouchableOpacity>
       );
     }
   };
 
+  const getFollowing = async () => {
+    await firestore()
+      .collection('user')
+      .doc(route.params.userId)
+      .collection('following')
+      .get()
+      .then(({size}) => {
+        console.log('Seguidores', size);
+        setFollowing(size);
+      });
+  };
+
+  const getFollowed = async () => {
+    await firestore()
+      .collection('user')
+      .doc(route.params.userId)
+      .collection('followed')
+      .get()
+      .then(({size}) => {
+        console.log('Seguidores', size);
+        setFollowed(size);
+        console.log(followed);
+      });
+  };
+
   useFocusEffect(
     React.useCallback(() => {
-      getUser(), getIsFollowing();
+      getUser(), getIsFollowing(), getFollowing();
     }, []),
   );
 
-  useEffect(() => {
-    const subscribe = firestore()
-      .collection('user')
-      .doc(user.uid)
-      .collection('following')
-      .doc(route.params.userId)
-      .onSnapshot(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          setIsFollowing(true);
-        } else {
-          setIsFollowing(false);
-        }
-      });
-    return () => subscribe();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      getIsFollowed(), getFollowed();
+    }, []),
+  );
 
-  
+  useFocusEffect(
+    React.useCallback(() => {
+      const subscribe = firestore()
+        .collection('user')
+        .doc(user.uid)
+        .collection('following')
+        .doc(route.params.userId)
+        .onSnapshot(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            setIsFollowing(true);
+          } else {
+            setIsFollowing(false);
+          }
+        });
+      return () => subscribe();
+    }, []),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const subscribe = firestore()
+        .collection('user')
+        .doc(route.params.userId)
+        .collection('followed')
+        .doc(user.uid)
+        .onSnapshot(documentSnapshot => {
+          if (documentSnapshot.exists) {
+            setIsFollowed(true);
+          } else {
+            setIsFollowed(false);
+          }
+        });
+      return () => subscribe();
+    }, []),
+  );
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
       <ScrollView style={styles.container}>
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
-            
+            source={{
+              uri: route.params.userImage,
+            }}
             size={90}
           />
           <View style={{flexDirection: 'column-reverse'}}></View>
@@ -146,7 +240,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
             </Text>
             <Caption style={styles.captionText}>
               {' '}
-              {route.params ? route.params.id : 'Ainda não há nome'}{' '}
+              {route.params ? route.params.bio : 'Ainda não há nome'}{' '}
             </Caption>
           </View>
         </View>
@@ -164,11 +258,11 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
                 borderRightWidth: 1,
               },
             ]}>
-            <Title style={styles.boxText}>{route.params.followers}</Title>
+            <Title style={styles.boxText}>{followed}</Title>
             <Caption style={styles.captionText}>Seguidores</Caption>
           </View>
           <View style={styles.infoBox}>
-            <Title style={styles.boxText}>{route.params.following}</Title>
+            <Title style={styles.boxText}>{following}</Title>
             <Caption style={styles.captionText}>Seguindo</Caption>
           </View>
         </View>
@@ -198,10 +292,8 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           <Text style={styles.contactText}>Meu Servidor</Text>
         </View>
         <View style={styles.container2}>
-          <Text style={styles.meusJogosText}>Meus Jogos</Text>
-          <View style={styles.containerJogos}>
-            
-          </View>
+          <Text style={styles.meusJogosText}>Jogos favoritos</Text>
+          <View style={styles.containerJogos}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -242,6 +334,7 @@ const styles = StyleSheet.create({
     marginLeft: '5%',
     marginTop: '5%',
     marginBottom: '5%',
+    backgroundColor: 'rgba(255, 255, 255,0.3)',
   },
   btnSeguir: {
     width: '38%',

@@ -70,7 +70,6 @@ export default function TelaEditarPerfil({navigation}) {
         bio: userData.bio,
         name: userData.name,
         userName: userData.userName,
-        platforms: userData.platforms,
       })
       .then(() => {
         console.log('User Updated!');

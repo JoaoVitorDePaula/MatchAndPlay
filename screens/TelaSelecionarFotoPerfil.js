@@ -18,8 +18,6 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
 
   const [selectImage, setSelectImage] = useState();
 
-  const [selected, setSelected] = useState();
-
   const getUser = async () => {
     const currentUser = await firestore()
       .collection('user')
@@ -33,7 +31,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       });
   };
 
-  const getProfileImages = () => {
+  const getProfileImages = async() => {
     firestore()
       .collection('profile_images')
       .get()
@@ -63,7 +61,8 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
   const RenderItem = () => (
     <>
       {data.map((item, index) => (
-        <TouchableOpacity key={index} onPress={() => [setSelectImage(item), console.log(item)]}>
+        <TouchableOpacity key={index} 
+        onPress={() => [setSelectImage(item)]}>
           <Image
             style={styles.jogosImage}
             source={{
@@ -80,16 +79,17 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
   }, []);
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.titleText}>Selecione seu avatar:</Text>
-      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+      <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',}}>
         <RenderItem />
       </View>
-
       <TouchableOpacity style={styles.btnSubmit} onPress={() => handleUpdate()}>
         <Text style={styles.buttonText}> Salvar </Text>
       </TouchableOpacity>
     </View>
+    </ScrollView>
   );
 }
 
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#191919',
+    backgroundColor: '#191919', 
   },
   container: {
     flex: 1,
@@ -120,24 +120,11 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginLeft: '5%',
   },
-  submitText: {
-    color: '#FFF',
-    fontSize: 18,
-    margin: '3%',
-  },
-  registerText: {
-    color: '#35AAFF',
-  },
   userImg: {
     marginRight: '5%',
     marginLeft: '5%',
     marginTop: '5%',
     marginBottom: '5%',
-  },
-  btnEditar: {},
-  registerText: {
-    color: '#35AAFF',
-    fontSize: 20,
   },
   titleText: {
     color: '#FFF',
@@ -149,67 +136,15 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 18,
   },
-  infoBox: {
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  infoBoxWrapper: {
-    borderBottomColor: '#777777',
-    borderBottomWidth: 1,
-    borderTopColor: '#777777',
-    borderTopWidth: 1,
-    flexDirection: 'row',
-    height: 100,
-    marginBottom: '3%',
-    backgroundColor: '#1D1D1D',
-  },
-  boxText: {
-    color: '#FFF',
-    fontSize: 18,
-  },
-  buttonMaisStyle: {
-    backgroundColor: '#494949',
-    borderWidth: 1,
-    borderColor: '#fff',
-    borderRadius: 10,
-    margin: '3%',
-    height: 160,
-    width: 110,
-    alignItems: 'center',
-  },
-  inputText: {
-    backgroundColor: '#363636',
-    width: '90%',
-    marginBottom: 15,
-    color: '#FFF',
-    fontSize: 17,
-    borderRadius: 7,
-    padding: 10,
-    marginBottom: '6%',
-    marginTop: '6%',
-  },
-  descriptionText: {
-    color: '#c0c0c0',
-    fontSize: 18,
-    marginLeft: '4%',
-    marginBottom: '1%',
-  },
-  captionText: {
-    color: '#FFF',
-    fontSize: 13,
-    color: '#777777',
-    marginLeft: '40%',
-    marginTop: '1.5%',
-  },
   jogosImage: {
-    backgroundColor: '#494949',
+    backgroundColor: '#rgba(255, 255, 255, 0.4)',
     borderWidth: 1,
     borderColor: '#494949',
     borderRadius: 100,
-    height: 80,
-    width: 80,
-    marginLeft: 10,
-    marginBottom: 20,
+    height: 70,
+    width: 70,
+    marginLeft: "4%",
+    marginBottom: "8%",
+    borderColor: 'rgba(255, 255, 255, 1)'
   },
 });

@@ -15,68 +15,134 @@ import {SafeAreaView} from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
+import {firebase} from '@react-native-firebase/auth';
 
 const TelaPerfil = ({navigation, route}) => {
-
   const {user} = useContext(AuthContext);
 
   const [userData, setUserData] = useState([]);
 
-  const [update, setUpdade] = useState(false);
-
   const [following, setFollowing] = useState(0);
 
+  const [followed, setFollowed] = useState(0);
 
+  const [favoriteGamesId, setFavoriteGamesId] = useState([]);
 
-  const whenUpdate = () => {
-    setUpdade(true);
-    setTimeout(
-      () => {
-        setUpdade(false);
-      },
-      1000,
-      getUser(),
-    );
-  };
+  const [favoriteGames, setFavoriteGames] = useState([]);
+
+  const [listGames, setListGames] = useState([]);
 
   const getUser = async () => {
     await firestore()
       .collection('user')
-      .doc(route.params ? route.params.userId : user.uid)
+      .doc(user.uid)
       .get()
       .then(documentSnapshot => {
-        documentSnapshot.exists
-          console.log('User Data', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
+        documentSnapshot.exists;
+        //console.log('User Data', documentSnapshot.data());
+        setUserData(documentSnapshot.data());
       });
   };
 
-  const getIsFollowing = async () => {
+  const getFavoriteGamesId = async () => {
+    await firestore()
+      .collection('user')
+      .doc(user.uid)
+      .collection('favoriteGames')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+          };
+          d.push(game);
+        });
+        setFavoriteGamesId(d);
+        //console.log(d);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const getFavoriteGames = async () => {
+    await firestore()
+      .collection('games')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+            gameImage: documentSnapshot.data().gameImage,
+            gameName: documentSnapshot.data().gameName,
+            platforms: documentSnapshot.data().platforms,
+            description: documentSnapshot.data().description,
+          };
+          d.push(game);
+        });
+        setFavoriteGames(d);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
+      });
+  };
+
+  const RenderItem = () => (
+    <>
+      {favoriteGames.map((item, index) => (
+        <TouchableOpacity key={index}>
+          <Image
+            style={styles.jogosImage}
+            source={{
+              uri: item.gameImage,
+            }}
+          />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
+
+  const getFollowing = async () => {
     await firestore()
       .collection('user')
       .doc(user.uid)
       .collection('following')
       .get()
       .then(({size}) => {
-          console.log('Seguidores',size);
-          setFollowing(size)
-        }
-      );
+        //console.log('Seguidores',size);
+        setFollowing(size);
+        //console.log(size)
+      });
+  };
+
+  const getFollowed = async () => {
+    await firestore()
+      .collection('user')
+      .doc(user.uid)
+      .collection('followed')
+      .get()
+      .then(({size}) => {
+        //console.log('Seguidores',size);
+        setFollowed(size);
+        //console.log(followed)
+      });
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(), getIsFollowing();
-    }, [])
+      getUser(),
+        getFollowing(),
+        getFollowed(),
+        getFavoriteGamesId(),
+        getFavoriteGames();
+    }, []),
   );
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <ScrollView
-        style={styles.container}
-        refreshControl={
-          <RefreshControl refreshing={update} onRefresh={whenUpdate} />
-        }>
+      <View style={styles.container}>
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
@@ -85,7 +151,6 @@ const TelaPerfil = ({navigation, route}) => {
             }}
             size={90}
           />
-          <View style={{flexDirection: 'column-reverse'}}></View>
           <View>
             <Text style={styles.userText}>
               {userData ? userData.userName : 'Ainda não há nome'}
@@ -94,7 +159,7 @@ const TelaPerfil = ({navigation, route}) => {
               {' '}
               {userData ? userData.bio : 'Ainda não há nada aqui'}
             </Caption>
-          </View> 
+          </View>
         </View>
         <View style={styles.infoBoxWrapper}>
           <View
@@ -105,7 +170,7 @@ const TelaPerfil = ({navigation, route}) => {
                 borderRightWidth: 1,
               },
             ]}>
-            <Title style={styles.boxText}>323</Title>
+            <Title style={styles.boxText}>{followed}</Title>
             <Caption style={styles.captionText}>Seguidores</Caption>
           </View>
           <View style={styles.infoBox}>
@@ -137,19 +202,19 @@ const TelaPerfil = ({navigation, route}) => {
           />
           <Text style={styles.contactText}>Meu Servidor</Text>
         </View>
+
         <View style={styles.container2}>
-          <Text style={styles.meusJogosText}>Meus Jogos</Text>
+          
+          <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
+          <ScrollView>
           <View style={styles.containerJogos}>
-            <View style={styles.box2}>
-              <TouchableOpacity
-                style={styles.buttonMaisStyle}
-                activeOpacity={0.5}>
-                <Text style={styles.boxAddGame}>+</Text>
-              </TouchableOpacity>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <RenderItem />
             </View>
           </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -173,7 +238,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#1D1D1D',
   },
   containerJogos: {
-    flexDirection: 'row',
     marginTop: '3%',
   },
   btnSubmit: {
@@ -201,7 +265,6 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginBottom: '5%',
     backgroundColor: 'rgba(255, 255, 255,0.3)',
-    
   },
   btnEditar: {},
   registerText: {
@@ -276,8 +339,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 160,
     width: 110,
-    alignItems: 'center',
-    marginLeft: 20,
     marginBottom: '5%',
+    marginLeft: 16,
   },
 });

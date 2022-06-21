@@ -139,7 +139,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
     if (isFavorite) {
       return (
         <TouchableOpacity
-          onPress={() => [changeFollowState(), changeFollowState2()]}>
+          onPress={() => [changeFollowState(), changeFollowState2(), setFavorited(state => state-1)]}>
           <Image
             style={{
               width: 40,
@@ -155,7 +155,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
     } else {
       return (
         <TouchableOpacity
-          onPress={() => [changeFollowState(), changeFollowState2()]}>
+          onPress={() => [changeFollowState(), changeFollowState2(), setFavorited(state => state+1)]}>
           <Image
             style={{
               width: 40,

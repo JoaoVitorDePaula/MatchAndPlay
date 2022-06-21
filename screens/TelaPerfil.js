@@ -181,7 +181,7 @@ const TelaPerfil = ({navigation, route}) => {
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons
             style={styles.IconContact}
-            name="instagram"
+            name="discord"
             size={30}
           />
           <Text style={styles.contactText}>Master_123</Text>

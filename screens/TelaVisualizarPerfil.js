@@ -132,7 +132,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnSeguir}
-            onPress={() => [changeFollowState(), changeFollowState2()]}>
+            onPress={() => [changeFollowState(), changeFollowState2(), setFollowed(state => state-1)]}>
             <Text style={styles.registerText}>Deixa de seguir</Text>
           </TouchableOpacity>
         </View>
@@ -141,7 +141,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       return (
         <TouchableOpacity
           style={styles.btnSeguir}
-          onPress={() => [changeFollowState(), changeFollowState2()]}>
+          onPress={() => [changeFollowState(), changeFollowState2(), setFollowed(state => state+1)]}>
           <Text style={styles.registerText}>Seguir</Text>
         </TouchableOpacity>
       );

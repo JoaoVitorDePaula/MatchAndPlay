@@ -48,8 +48,8 @@ const TelaBusca = ({navigation, route}) => {
           />
           <View>
             <Text style={styles.userText}>{item.userName}</Text>
-            <Text style={styles.contentText}>{item.email}</Text>
-            <Text style={styles.contentText}>{item.name}</Text>
+            <Text style={styles.contentText}>{item.bio}</Text>
+           
           </View>
         </View>
       </TouchableOpacity>
@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: '2%',
     marginLeft: '5%',
+    
   },
   contentText: {
     color: '#FFF',

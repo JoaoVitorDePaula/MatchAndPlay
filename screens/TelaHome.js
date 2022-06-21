@@ -77,6 +77,7 @@ const TelaHome = ({navigation, route}) => {
   const getPCGames = () => {
     firestore()
       .collection('games')
+      .orderBy('gameName')
       .get()
       .then(querySnapshot => {
         let d = [];

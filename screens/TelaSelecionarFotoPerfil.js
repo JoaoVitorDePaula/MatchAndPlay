@@ -58,6 +58,25 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       });
   };
 
+  // const handleUpdate2 = async () => {
+  //   firestore()
+  //     .collection('user')
+  //     .doc(user.uid)
+  //     .update({
+  //       social: {
+  //         'whatsapp': "123",
+  //         'discord': "123123"
+  //       }
+  //     })
+  //     .then(() => {
+  //       console.log('User Updated!');
+  //       Alert.alert(
+  //         'Perfil Atualizado',
+  //         'Seu perfil foi atualizado com sucesso.',
+  //       );
+  //     });
+  // };
+
   const RenderItem = () => (
     <>
       {data.map((item, index) => (
@@ -85,7 +104,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',}}>
         <RenderItem />
       </View>
-      <TouchableOpacity style={styles.btnSubmit} onPress={() => handleUpdate()}>
+      <TouchableOpacity style={styles.btnSubmit} onPress={() => [handleUpdate()]}>
         <Text style={styles.buttonText}> Salvar </Text>
       </TouchableOpacity>
     </View>

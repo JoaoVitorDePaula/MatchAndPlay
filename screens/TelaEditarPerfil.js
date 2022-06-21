@@ -136,34 +136,6 @@ export default function TelaEditarPerfil({navigation}) {
             {userData ? userData.userName : ''}{' '}
           </Title>
         </View>
-        <Text style={styles.descriptionText}> Plataformas favoritas </Text>
-        <View style={{alignItems: 'center'}}>
-          <View style={{alignItems: 'center'}}>
-            <DropDownPicker
-              style={styles.inputText}
-              open={open}
-              value={value}
-              onChangeText={txt => setUserData({...userData, bio: txt})}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              theme="DARK"
-              multiple={true}
-              mode="BADGE"
-              placeholder="Selecione suas plataformas favoritas"
-              badgeDotColors={[
-                '#e76f51',
-                '#00b4d8',
-                '#e9c46a',
-                '#e76f51',
-                '#8ac926',
-                '#00b4d8',
-                '#e9c46a',
-              ]}
-            />
-          </View>
-        </View>
 
         <View>
           <View style={{flex: 1, flexDirection: 'row'}}>

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
-import {Picker} from '@react-native-picker/picker';
 
 export default function TelaSelecionarFotoPerfil({navigation}) {
   const {user} = useContext(AuthContext);

@@ -188,13 +188,15 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       .collection('user')
       .doc(route.params.userId)
       .collection('favoriteGames')
+      .orderBy('gameName')
       .get()
       .then(querySnapshot => {
         let d = [];
         querySnapshot.forEach(documentSnapshot => {
           const game = {
             id: documentSnapshot.id,
-            gameImage: documentSnapshot.data().userImage,
+            gameImage: documentSnapshot.data().gameImage,
+            gameName: documentSnapshot.data().gameName,
           };
           d.push(game);
         });
@@ -268,11 +270,11 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           <View>
             <Text style={styles.userText}>
               {' '}
-              {route.params ? route.params.userName : 'Ainda não há nome'}
+              {route.params.userName}
             </Text>
             <Caption style={styles.captionText}>
               {' '}
-              {route.params ? route.params.bio : 'Ainda não há nome'}{' '}
+              {route.params.bio}{' '}
             </Caption>
           </View>
         </View>
@@ -299,22 +301,17 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           </View>
         </View>
 
+        <View style={styles.socialContainer}>
+
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons
             style={styles.IconContact}
             name="instagram"
             size={30}
           />
-          <Text style={styles.contactText}>Master_123</Text>
+          <Text style={styles.contactText}>Jukes_123</Text>
         </View>
-        <View style={{flexDirection: 'row'}}>
-          <MaterialCommunityIcons
-            style={styles.IconContact}
-            name="whatsapp"
-            size={30}
-          />
-          <Text style={styles.contactText}>24 99988 7766</Text>
-        </View>
+        
         <View style={{flexDirection: 'row'}}>
           <MaterialCommunityIcons
             style={styles.IconContact}
@@ -322,6 +319,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
             size={30}
           />
           <Text style={styles.contactText}>Meu Servidor</Text>
+        </View>
         </View>
         <View style={styles.container2}>
           <Text style={styles.meusJogosText}>Jogos favoritos</Text>
@@ -360,7 +358,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: '3%',
   },
-
+  socialContainer: {
+    flexDirection: 'row',
+    marginBottom: '6%',
+    marginTop: '3%',
+    marginLeft: '2%',
+  },
   submitText: {
     color: '#FFF',
     fontSize: 15,
@@ -404,6 +407,7 @@ const styles = StyleSheet.create({
   contactText: {
     color: '#777777',
     marginLeft: '5%',
+    alignSelf: 'center',
   },
   captionText: {
     color: '#FFF',
@@ -413,7 +417,7 @@ const styles = StyleSheet.create({
   IconContact: {
     color: '#777777',
     marginLeft: '2%',
-    marginBottom: '3%',
+    
   },
   infoBox: {
     width: '50%',

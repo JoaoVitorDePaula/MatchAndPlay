@@ -71,7 +71,8 @@ const TelaVisualizarJogos = ({navigation, route}) => {
         .collection('favoriteGames')
         .doc(route.params.id)
         .set({
-          userImage: route.params.gameImage,
+          gameImage: route.params.gameImage,
+          gameName: route.params.gameName
         })
         .then();
     }
@@ -93,7 +94,8 @@ const TelaVisualizarJogos = ({navigation, route}) => {
         .collection('favorited')
         .doc(user.uid)
         .set({
-          userImage: route.params.gameImage,
+          gameImage: route.params.gameImage,
+          gameName: route.params.gameName
         })
         .set({})
         .then();

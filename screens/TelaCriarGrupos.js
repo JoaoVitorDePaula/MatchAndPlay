@@ -34,6 +34,7 @@ export default function TelaCriarGrupos({navigation}) {
   const getGames = () => {
     firestore()
       .collection('games')
+      .orderBy('gameName')
       .get()
       .then(querySnapshot => {
         let d = [];

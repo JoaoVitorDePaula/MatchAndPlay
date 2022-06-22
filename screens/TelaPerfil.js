@@ -1,21 +1,18 @@
-import React, {useState, useEffect, useContext, useCallback} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   ScrollView,
   Image,
   Text,
-  RefreshControl,
 } from 'react-native';
-import {Avatar, Title, Caption, TouchableRipple} from 'react-native-paper';
+import {Avatar, Title, Caption} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
-import {firebase} from '@react-native-firebase/auth';
 
 const TelaPerfil = ({navigation, route}) => {
   const {user} = useContext(AuthContext);

@@ -1,20 +1,15 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Animated,
   ScrollView,
-  Image,
   Text,
-  RefreshControl,
 } from 'react-native';
 import {
   Avatar,
   Title,
   Caption,
-  TouchableRipple,
-  Button,
 } from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';

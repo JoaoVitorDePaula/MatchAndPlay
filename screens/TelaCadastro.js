@@ -16,7 +16,7 @@ import {AuthContext} from '../navigation/AuthProvider';
 export default function TelaCadastro() {
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
   const [opacity] = useState(new Animated.Value(0));
-  const [logo] = useState(new Animated.ValueXY({x: 230, y: 255}));
+  const [logo] = useState(new Animated.ValueXY({x: 258, y: 255}));
 
   const [inputEmail, setInputEmail] = useState('');
   const [inputSenha, setInputSenha] = useState('');
@@ -52,7 +52,7 @@ export default function TelaCadastro() {
   function keyboardDidShow() {
     Animated.parallel([
       Animated.timing(logo.x, {
-        toValue: 130,
+        toValue: 155,
         duration: 100,
         useNativeDriver: false,
       }),
@@ -67,7 +67,7 @@ export default function TelaCadastro() {
   function keyboardDidHide() {
     Animated.parallel([
       Animated.timing(logo.x, {
-        toValue: 230,
+        toValue: 258,
         duration: 100,
         useNativeDriver: false,
       }),

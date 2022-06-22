@@ -9,7 +9,6 @@ import {
   StyleSheet,
   Animated,
   Keyboard,
-  Alert,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {LogBox} from 'react-native';
@@ -20,11 +19,16 @@ LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 1):']);
 LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 2):']);
 LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 3):']);
 LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 4):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 5):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 6):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 7):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 8):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 9):']);
 
 export default function TelaLogin({navigation}) {
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
   const [opacity] = useState(new Animated.Value(0));
-  const [logo] = useState(new Animated.ValueXY({x: 270, y: 280}));
+  const [logo] = useState(new Animated.ValueXY({x: 283, y: 280}));
 
   const [inputEmail, setInputEmail] = useState('');
   const [inputSenha, setInputSenha] = useState('');
@@ -64,7 +68,7 @@ export default function TelaLogin({navigation}) {
   function keyboardDidShow() {
     Animated.parallel([
       Animated.timing(logo.x, {
-        toValue: 170,
+        toValue: 183,
         duration: 100,
         useNativeDriver: false,
       }),
@@ -79,7 +83,7 @@ export default function TelaLogin({navigation}) {
   function keyboardDidHide() {
     Animated.parallel([
       Animated.timing(logo.x, {
-        toValue: 270,
+        toValue: 283,
         duration: 100,
         useNativeDriver: false,
       }),
@@ -189,6 +193,7 @@ const styles = StyleSheet.create({
   containerLogo: {
     justifyContent: 'center',
     marginTop: '10%',
+    marginBottom: '10%',
   },
   container: {
     flex: 1,

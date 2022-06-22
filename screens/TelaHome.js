@@ -5,15 +5,11 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Animated,
-  FlatList,
   ScrollView,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import firestore from '@react-native-firebase/firestore';
-import {useFocusEffect} from '@react-navigation/native';
-import {Picker} from '@react-native-picker/picker';
 
 const TelaHome = ({navigation, route}) => {
   const {logout} = useContext(AuthContext);
@@ -52,6 +48,7 @@ const TelaHome = ({navigation, route}) => {
   const getMobilieGames = () => {
     firestore()
       .collection('games')
+      .orderBy("gameName")
       .get()
       .then(querySnapshot => {
         let d = [];
@@ -77,7 +74,7 @@ const TelaHome = ({navigation, route}) => {
   const getPCGames = () => {
     firestore()
       .collection('games')
-      .orderBy('gameName')
+      .orderBy('description')
       .get()
       .then(querySnapshot => {
         let d = [];

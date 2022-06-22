@@ -9,9 +9,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GoogleSignin } from '@react-native-community/google-signin';
 
 
-LogBox.ignoreLogs([
+{LogBox.ignoreLogs([
   "[react-native-gesture-handler] Seems like you\'re using an old API with gesture components, check out new Gestures system!",
 ]);
+LogBox.ignoreLogs(['EventEmitter.removeListener']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 0):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 1):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 2):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 3):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 4):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 5):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 6):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 7):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 8):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 9):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 10):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 11):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 12):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 13):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 14):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 15):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 16):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 17):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 18):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 19):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 20):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 21):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 22):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 23):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 24):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 25):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 26):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 27):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 28):']);
+LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 29):']);}
 
 const Stack = createStackNavigator();
 

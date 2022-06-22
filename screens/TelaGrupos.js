@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Animated,
   FlatList,
+  ImageBackground,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
@@ -15,29 +16,30 @@ import firestore from '@react-native-firebase/firestore';
 export default function TelaGrupos({navigation}) {
   const {user} = useContext(AuthContext);
 
-  const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));
-  const [opacity] = useState(new Animated.Value(0));
-
-  const {logout} = useContext(AuthContext);
-
   const [groups, setGroups] = useState('');
 
   const [list, setList] = useState([]);
   const [data, setData] = useState([]);
 
-  const [userData, setUserData] = useState([]);
-
   const renderItem = ({item}) => (
     <>
       <TouchableOpacity style={styles.buttonMaisStyle}>
         <View style={styles.boxGrupos}>
+        <ImageBackground 
+    source={{uri: item.groupGameImage}}
+        imageStyle={{opacity: 0.2}}
+        style={{width: '100%', height: '100%'}}
+        blurRadius={3}>
           <Text style={styles.grupoTitleText}>{item.groupName}</Text>
           <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
           <Text style={styles.grupoText}>Rank: {item.rank}</Text>
           <Text style={styles.grupoText}>Tipo: Competitivo</Text>
           <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
+          </ImageBackground>
         </View>
+        
       </TouchableOpacity>
+      
     </>
   );
 
@@ -63,6 +65,7 @@ export default function TelaGrupos({navigation}) {
             members: documentSnapshot.data().members,
             rank: documentSnapshot.data().rank,
             rating: documentSnapshot.data().rating,
+            groupGameImage: documentSnapshot.data().groupGameImage,
           };
           d.push(group);
         });
@@ -82,10 +85,8 @@ export default function TelaGrupos({navigation}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('Dados do usuario', documentSnapshot.data().userName);
           setUserData(documentSnapshot.data().userName);
         }
-        console.log('Nome do usuario', userData);
       });
   };
 

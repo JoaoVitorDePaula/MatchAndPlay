@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   Image,
+  Alert,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
@@ -52,9 +53,13 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
         console.log('User Updated!');
         Alert.alert(
           'Perfil Atualizado',
-          'Seu perfil foi atualizado com sucesso.',
+          'Sua foto foi atualizada!',
         );
       });
+  };
+
+  const MoveEditarPerfil = () => {
+    navigation.navigate('TelaEditarPerfil');
   };
 
   // const handleUpdate2 = async () => {
@@ -103,7 +108,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',}}>
         <RenderItem />
       </View>
-      <TouchableOpacity style={styles.btnSubmit} onPress={() => [handleUpdate()]}>
+      <TouchableOpacity style={styles.btnSubmit} onPress={() => [handleUpdate(), MoveEditarPerfil()]}>
         <Text style={styles.buttonText}> Salvar </Text>
       </TouchableOpacity>
     </View>

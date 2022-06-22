@@ -5,12 +5,9 @@ import {
   StyleSheet,
   ScrollView,
   Text,
+  Image,
 } from 'react-native';
-import {
-  Avatar,
-  Title,
-  Caption,
-} from 'react-native-paper';
+import {Avatar, Title, Caption} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -18,12 +15,9 @@ import firestore from '@react-native-firebase/firestore';
 import {useFocusEffect} from '@react-navigation/native';
 
 const TelaVisualizarPerfil = ({navigation, route}) => {
-  const {logout} = useContext(AuthContext);
   const {user} = useContext(AuthContext);
 
   const [userData, setUserData] = useState([]);
-
-  const [update, setUpdade] = useState(false);
 
   const [isFollowing, setIsFollowing] = useState();
 
@@ -33,6 +27,8 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
 
   const [followed, setFollowed] = useState(0);
 
+  const [favoriteGames, setFavoriteGames] = useState([]);
+
   const getUser = async () => {
     await firestore()
       .collection('user')
@@ -40,7 +36,6 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          //console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
       });
@@ -127,7 +122,11 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnSeguir}
-            onPress={() => [changeFollowState(), changeFollowState2(), setFollowed(state => state-1)]}>
+            onPress={() => [
+              changeFollowState(),
+              changeFollowState2(),
+              setFollowed(state => state - 1),
+            ]}>
             <Text style={styles.registerText}>Deixa de seguir</Text>
           </TouchableOpacity>
         </View>
@@ -136,7 +135,11 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       return (
         <TouchableOpacity
           style={styles.btnSeguir}
-          onPress={() => [changeFollowState(), changeFollowState2(), setFollowed(state => state+1)]}>
+          onPress={() => [
+            changeFollowState(),
+            changeFollowState2(),
+            setFollowed(state => state + 1),
+          ]}>
           <Text style={styles.registerText}>Seguir</Text>
         </TouchableOpacity>
       );
@@ -150,7 +153,6 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       .collection('following')
       .get()
       .then(({size}) => {
-        console.log('Seguidores', size);
         setFollowing(size);
       });
   };
@@ -162,15 +164,50 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
       .collection('followed')
       .get()
       .then(({size}) => {
-        console.log('Seguidores', size);
         setFollowed(size);
-        console.log(followed);
+      });
+  };
+
+  const RenderItem = () => (
+    <>
+      {favoriteGames.map((item, index) => (
+        <TouchableOpacity key={index}>
+          <Image
+            style={styles.jogosImage}
+            source={{
+              uri: item.gameImage,
+            }}
+          />
+        </TouchableOpacity>
+      ))}
+    </>
+  );
+
+  const getFavoriteGames = async () => {
+    await firestore()
+      .collection('user')
+      .doc(route.params.userId)
+      .collection('favoriteGames')
+      .get()
+      .then(querySnapshot => {
+        let d = [];
+        querySnapshot.forEach(documentSnapshot => {
+          const game = {
+            id: documentSnapshot.id,
+            gameImage: documentSnapshot.data().userImage,
+          };
+          d.push(game);
+        });
+        setFavoriteGames(d);
+      })
+      .catch(e => {
+        console.log('Erro, catch user' + e);
       });
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(), getIsFollowing(), getFollowing();
+      getUser(), getIsFollowing(), getFollowing(), getFavoriteGames();
     }, []),
   );
 
@@ -218,7 +255,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
         <View style={styles.topPage}>
           <Avatar.Image
             style={styles.userImg}
@@ -287,10 +324,16 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           <Text style={styles.contactText}>Meu Servidor</Text>
         </View>
         <View style={styles.container2}>
-          <Text style={styles.meusJogosText}>Jogos favoritos</Text>
-          <View style={styles.containerJogos}></View>
+          <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
+          <ScrollView>
+            <View style={styles.containerJogos}>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <RenderItem />
+              </View>
+            </View>
+          </ScrollView>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -421,8 +464,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 160,
     width: 110,
-    alignItems: 'center',
-    marginLeft: 20,
     marginBottom: '5%',
+    marginLeft: 16,
   },
 });

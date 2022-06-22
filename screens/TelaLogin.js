@@ -11,19 +11,6 @@ import {
   Keyboard,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
-import {LogBox} from 'react-native';
-
-LogBox.ignoreLogs(['EventEmitter.removeListener']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 0):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 1):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 2):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 3):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 4):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 5):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 6):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 7):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 8):']);
-LogBox.ignoreLogs(['Possible Unhandled Promise Rejection (id: 9):']);
 
 export default function TelaLogin({navigation}) {
   const [offset] = useState(new Animated.ValueXY({x: 0, y: 80}));

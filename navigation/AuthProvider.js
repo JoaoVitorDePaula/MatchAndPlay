@@ -138,6 +138,7 @@ export const AuthProvider = ({children}) => {
           description,
           members,
           rank,
+          gameImage,
         ) => {
           firestore()
             .collection('groups')
@@ -149,6 +150,7 @@ export const AuthProvider = ({children}) => {
               rank: rank,
               members: [members],
               rating: 0,
+              groupGameImage: gameImage,
             });
         },
       }}>

@@ -1,12 +1,10 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
-  ScrollView,
   TouchableOpacity,
   StyleSheet,
   Text,
 } from 'react-native';
-import {Title} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {Picker} from '@react-native-picker/picker';
@@ -28,7 +26,6 @@ export default function TelaCriarGrupos({navigation}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
       });
@@ -49,7 +46,6 @@ export default function TelaCriarGrupos({navigation}) {
           };
           d.push(game);
         });
-        console.log(d);
         setData(d);
         setList(d);
       })

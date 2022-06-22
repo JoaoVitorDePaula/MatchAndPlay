@@ -70,7 +70,9 @@ const TelaVisualizarJogos = ({navigation, route}) => {
         .doc(user.uid)
         .collection('favoriteGames')
         .doc(route.params.id)
-        .set({})
+        .set({
+          userImage: route.params.gameImage,
+        })
         .then();
     }
   };
@@ -90,6 +92,9 @@ const TelaVisualizarJogos = ({navigation, route}) => {
         .doc(route.params.id)
         .collection('favorited')
         .doc(user.uid)
+        .set({
+          userImage: route.params.gameImage,
+        })
         .set({})
         .then();
     }
@@ -102,7 +107,6 @@ const TelaVisualizarJogos = ({navigation, route}) => {
       .collection('favoriteGames')
       .get()
       .then(({size}) => {
-        console.log('Seguidores', size);
         setFollowing(size);
       });
   };
@@ -114,9 +118,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
       .collection('favorited')
       .get()
       .then(({size}) => {
-        console.log('Favorito', size);
         setFavorited(size);
-        console.log(favorited);
       });
   };
 
@@ -127,7 +129,6 @@ const TelaVisualizarJogos = ({navigation, route}) => {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
       });
@@ -137,14 +138,18 @@ const TelaVisualizarJogos = ({navigation, route}) => {
     if (isFavorite) {
       return (
         <TouchableOpacity
-          onPress={() => [changeFollowState(), changeFollowState2(), setFavorited(state => state-1)]}>
+          onPress={() => [
+            changeFollowState(),
+            changeFollowState2(),
+            setFavorited(state => state - 1),
+          ]}>
           <Image
             style={{
               width: 40,
               height: 40,
               alignSelf: 'flex-end',
-              marginTop: "2%",
-              marginRight: "2%",
+              marginTop: '2%',
+              marginRight: '2%',
             }}
             source={require('../src/assets/favorite.png')}
           />
@@ -153,15 +158,19 @@ const TelaVisualizarJogos = ({navigation, route}) => {
     } else {
       return (
         <TouchableOpacity
-          onPress={() => [changeFollowState(), changeFollowState2(), setFavorited(state => state+1)]}>
+          onPress={() => [
+            changeFollowState(),
+            changeFollowState2(),
+            setFavorited(state => state + 1),
+          ]}>
           <Image
             style={{
               width: 40,
               height: 40,
               opacity: 0.2,
               alignSelf: 'flex-end',
-              marginTop: "2%",
-              marginRight: "2%"
+              marginTop: '2%',
+              marginRight: '2%',
             }}
             source={require('../src/assets/favorite.png')}
           />
@@ -226,7 +235,8 @@ const TelaVisualizarJogos = ({navigation, route}) => {
         style={{width: '100%', height: '100%'}}
         blurRadius={3}>
 
-<RenderFollowButton/>
+        <RenderFollowButton/>
+        
         <View
           style={{
             alignItems: 'center',
@@ -234,7 +244,6 @@ const TelaVisualizarJogos = ({navigation, route}) => {
             justifyContent: 'center',
           }}>
           <Text style={styles.gameTitle}>{route.params.gameName}</Text>
-         
         </View>
         <View style={styles.containerLinesTop}>
           <View style={{alignItems: 'center'}}>

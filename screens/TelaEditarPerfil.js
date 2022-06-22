@@ -19,22 +19,16 @@ import {useFocusEffect} from '@react-navigation/native';
 export default function TelaEditarPerfil({navigation}) {
   const {user} = useContext(AuthContext);
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState([
-    {label: 'PC', value: 1},
-    {label: 'Playstation', value: 2},
-    {label: 'Xbox', value: 3},
-    {label: 'Nintendo Switch', value: 4},
-    {label: 'Mobile', value: 5},
-  ]);
-
   const [userData, setUserData] = useState(null);
 
   const [userImage, setUserImage] = useState();
 
   const MoveSelecionarFoto = () => {
     navigation.navigate('TelaSelecionarFotoPerfil');
+  };
+
+  const MovePerfil = () => {
+    navigation.navigate('TelaPerfil');
   };
 
   const getUser = async () => {
@@ -44,7 +38,6 @@ export default function TelaEditarPerfil({navigation}) {
       .get()
       .then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          console.log('User Data', documentSnapshot.data());
           setUserData(documentSnapshot.data());
         }
       });
@@ -70,7 +63,7 @@ export default function TelaEditarPerfil({navigation}) {
         userName: userData.userName,
       })
       .then(() => {
-        console.log('User Updated!');
+        console.log('Perfil Atualizado!');
         Alert.alert(
           'Perfil Atualizado',
           'Seu perfil foi atualizado com sucesso.',
@@ -179,7 +172,7 @@ export default function TelaEditarPerfil({navigation}) {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             style={styles.btnSubmit}
-            onPress={() => handleUpdate()}>
+            onPress={() => [handleUpdate(), MovePerfil()]}>
             <Text style={styles.submitText}> Atualizar</Text>
           </TouchableOpacity>
         </View>

@@ -25,6 +25,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
   const [selectGame, setSelectGame] = useState();
 
   const [inputGroupName, setInputGroupName] = useState('');
+  const [inputGroupGameImage, setInputGroupGameImage] = useState('');
   const [inputGroupGame, setInputGroupGame] = useState('');
   const [inputGroupOwner, setInputGroupOwner] = useState('');
   const [inputDescription, setInputDescription] = useState('');
@@ -65,6 +66,8 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .then(querySnapshot => {
         setGameName(querySnapshot.data().gameName);
         setInputGroupGame(querySnapshot.data().gameName);
+        setInputGroupGameImage(querySnapshot.data().gameImage);
+        console.log(querySnapshot.data().gameImage)
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -154,6 +157,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
                 inputDescription,
                 inputMembers,
                 inputRank,
+                inputGroupGameImage,
               )
             }>
             <Text style={styles.submitText}> Criar</Text>

@@ -23,11 +23,7 @@ const TelaPerfil = ({navigation, route}) => {
 
   const [followed, setFollowed] = useState(0);
 
-  const [favoriteGamesId, setFavoriteGamesId] = useState([]);
-
   const [favoriteGames, setFavoriteGames] = useState([]);
-
-  const [listGames, setListGames] = useState([]);
 
   const getUser = async () => {
     await firestore()
@@ -36,46 +32,23 @@ const TelaPerfil = ({navigation, route}) => {
       .get()
       .then(documentSnapshot => {
         documentSnapshot.exists;
-        //console.log('User Data', documentSnapshot.data());
         setUserData(documentSnapshot.data());
-      });
-  };
-
-  const getFavoriteGamesId = async () => {
-    await firestore()
-      .collection('user')
-      .doc(user.uid)
-      .collection('favoriteGames')
-      .get()
-      .then(querySnapshot => {
-        let d = [];
-        querySnapshot.forEach(documentSnapshot => {
-          const game = {
-            id: documentSnapshot.id,
-          };
-          d.push(game);
-        });
-        setFavoriteGamesId(d);
-        //console.log(d);
-      })
-      .catch(e => {
-        console.log('Erro, catch user' + e);
       });
   };
 
   const getFavoriteGames = async () => {
     await firestore()
-      .collection('games')
+      .collection('user')
+      .doc(user.uid)
+      .collection('favoriteGames')
+
       .get()
       .then(querySnapshot => {
         let d = [];
         querySnapshot.forEach(documentSnapshot => {
           const game = {
             id: documentSnapshot.id,
-            gameImage: documentSnapshot.data().gameImage,
-            gameName: documentSnapshot.data().gameName,
-            platforms: documentSnapshot.data().platforms,
-            description: documentSnapshot.data().description,
+            gameImage: documentSnapshot.data().userImage,
           };
           d.push(game);
         });
@@ -108,9 +81,7 @@ const TelaPerfil = ({navigation, route}) => {
       .collection('following')
       .get()
       .then(({size}) => {
-        //console.log('Seguidores',size);
         setFollowing(size);
-        //console.log(size)
       });
   };
 
@@ -121,19 +92,13 @@ const TelaPerfil = ({navigation, route}) => {
       .collection('followed')
       .get()
       .then(({size}) => {
-        //console.log('Seguidores',size);
         setFollowed(size);
-        //console.log(followed)
       });
   };
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(),
-        getFollowing(),
-        getFollowed(),
-        getFavoriteGamesId(),
-        getFavoriteGames();
+      getUser(), getFollowing(), getFollowed(), getFavoriteGames();
     }, []),
   );
 
@@ -201,14 +166,13 @@ const TelaPerfil = ({navigation, route}) => {
         </View>
 
         <View style={styles.container2}>
-          
           <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
           <ScrollView>
-          <View style={styles.containerJogos}>
-            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-              <RenderItem />
+            <View style={styles.containerJogos}>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <RenderItem />
+              </View>
             </View>
-          </View>
           </ScrollView>
         </View>
       </View>

@@ -65,7 +65,7 @@ export default function TelaEditarPerfil({navigation}) {
       .then(() => {
         console.log('Perfil Atualizado!');
         Alert.alert(
-          'Perfil Atualizado',
+          'Perfil Atualizado!',
           'Seu perfil foi atualizado com sucesso.',
         );
       });

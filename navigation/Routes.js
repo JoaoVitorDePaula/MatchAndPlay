@@ -5,6 +5,9 @@ import {AuthContext} from './AuthProvider';
 
 import AuthStack from './AuthStack';
 import AppStack from './AppStack.js';
+import {
+  StatusBar
+} from 'react-native';
 
 
 const Routes = () => {
@@ -27,6 +30,9 @@ const Routes = () => {
 
     return (
       <NavigationContainer>
+        <StatusBar backgroundColor={ "#191919"
+} barStyle="light-content"/>
+
         {user ? <AppStack/> : <AuthStack/>}
       </ NavigationContainer>
     );          I

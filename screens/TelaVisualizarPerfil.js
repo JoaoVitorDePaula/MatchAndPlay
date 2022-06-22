@@ -324,7 +324,7 @@ const TelaVisualizarPerfil = ({navigation, route}) => {
           <Text style={styles.contactText}>Meu Servidor</Text>
         </View>
         <View style={styles.container2}>
-          <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
+          <Text style={styles.meusJogosText}>Jogos favoritos</Text>
           <ScrollView>
             <View style={styles.containerJogos}>
               <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>

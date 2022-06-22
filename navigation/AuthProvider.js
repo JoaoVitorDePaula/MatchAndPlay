@@ -151,6 +151,13 @@ export const AuthProvider = ({children}) => {
               members: [members],
               rating: 0,
               groupGameImage: gameImage,
+            })
+            .then(() => {
+              console.log('Grupo criado!');
+              Alert.alert(
+                'Grupo criado!',
+                'Seu grupo foi criado com sucesso.',
+              );
             });
         },
       }}>

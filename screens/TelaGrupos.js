@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   Text,
   StyleSheet,
-  Animated,
   FlatList,
   ImageBackground,
 } from 'react-native';
@@ -71,7 +70,7 @@ export default function TelaGrupos({navigation}) {
         });
         setList(d);
         setData(d.filter(item => item.groupOwner.indexOf(a) > -1));
-        setGroups(d.filter(item => item.members.indexOf(user.uid) > -1));
+        setGroups(d.filter(item => item.members.includes(a) && item.groupOwner != a));
       })
       .catch(e => {
         console.log('Erro, catch user' + e);

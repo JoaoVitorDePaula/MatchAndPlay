@@ -195,8 +195,7 @@ const TelaHome = ({navigation, route}) => {
 
         <View style={styles.container2}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.meusJogosText}>JOGOS EM ALTA</Text>
-            <Text style={styles.maisJogosText}>Ver mais</Text>
+            <Text style={styles.meusJogosText}> SUGESTÕES DA SEMANA</Text>
           </View>
         </View>
         <View style={styles.containerJogos}>
@@ -207,8 +206,7 @@ const TelaHome = ({navigation, route}) => {
 
         <View style={styles.container2}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.meusJogosText}>TOP MOBILE</Text>
-            <Text style={styles.maisJogosText}> Ver mais</Text>
+            <Text style={styles.meusJogosText}> JOGUE EM QUALQUER LUGAR</Text>
           </View>
         </View>
         <View style={styles.containerJogos}>
@@ -221,8 +219,7 @@ const TelaHome = ({navigation, route}) => {
 
         <View style={styles.container2}>
           <View style={{flexDirection: 'row'}}>
-            <Text style={styles.meusJogosText}>TOP JOGOS PC</Text>
-            <Text style={styles.maisJogosText}> Ver mais</Text>
+            <Text style={styles.meusJogosText}> SÓ NO MOUSE E TECLADO</Text>
           </View>
         </View>
         <View style={styles.containerJogos}>
@@ -233,7 +230,7 @@ const TelaHome = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.container2}>
+        <View style={styles.container3}>
           <TouchableOpacity style={styles.btnSubmit} onPress={() => logout()}>
             <Text style={styles.submitText}> Sair</Text>
           </TouchableOpacity>

@@ -7,6 +7,7 @@ import {
   Text,
   SafeAreaView,
   TextInput,
+  Alert,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
@@ -45,6 +46,10 @@ export default function TelaCriarGrupos2({navigation, route}) {
       });
   };
 
+  const MoveGrupos = () => {
+    navigation.navigate('Grupo');
+  };
+
   const getGames = () => {
     firestore()
       .collection('games')
@@ -79,9 +84,9 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .collection('user')
       .doc(user.uid)
       .get()
-      .then(querySnapshot => {
-        setInputMembers(user.uid);
-      })
+      .then(
+        setInputMembers(user.uid)
+      )
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
@@ -150,7 +155,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
           <TouchableOpacity
             style={styles.btnSubmit}
             onPress={() =>
-              criarGrupo(
+              [criarGrupo(
                 inputGroupGame,
                 inputGroupName,
                 inputGroupOwner,
@@ -158,7 +163,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
                 inputMembers,
                 inputRank,
                 inputGroupGameImage,
-              )
+              ), MoveGrupos()]
             }>
             <Text style={styles.submitText}> Criar</Text>
           </TouchableOpacity>

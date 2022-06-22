@@ -52,7 +52,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       .then(() => {
         console.log('User Updated!');
         Alert.alert(
-          'Perfil Atualizado',
+          'Perfil Atualizado!',
           'Sua foto foi atualizada!',
         );
       });

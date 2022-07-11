@@ -160,6 +160,40 @@ export const AuthProvider = ({children}) => {
               );
             });
         },
+
+        criarCampeonato: async (
+          championshipGame,
+          championshipName,
+          championshipOwner,
+          championshipDescription,
+          championshipMembers,
+          championshipRank,
+          championshipGameImage,
+          championshipAwards,
+          championshipDate,
+        ) => {
+          firestore()
+            .collection('championships')
+            .add({
+              championshipGame: championshipGame,
+              championshipName: championshipName,
+              championshipOwner: championshipOwner,
+              championshipDescription: championshipDescription,
+              championshiprank: championshipRank,
+              championshipMembers: [championshipMembers],
+              rating: 0,
+              championshipGameImage: championshipGameImage,
+              championshipAwards: championshipAwards,
+              championshipDate: championshipDate,
+            })
+            .then(() => {
+              console.log('Campeonato criado!');
+              Alert.alert(
+                'Campeonato criado!',
+                'Seu campeonato foi criado com sucesso.',
+              );
+            });
+        },
       }}>
       {children}
     </AuthContext.Provider>

@@ -13,7 +13,9 @@ import TelaGrupos from '../screens/TelaGrupos';
 import TelaVisualizarPerfil from '../screens/TelaVisualizarPerfil';
 import TelaVisualizarJogos from '../screens/TelaVisualizarJogos';
 import TelaSelecionarFotoPerfil from '../screens/TelaSelecionarFotoPerfil';
-
+import TelaCampeonatos from '../screens/TelaCampeonatos';
+import TelaCriarCampeonatos from '../screens/TelaCriarCampeonatos';
+import TelaCriarCampeonatos2 from '../screens/TelaCriarCampeonatos2';
 
 const Stack = createStackNavigator();
 
@@ -109,7 +111,7 @@ const GrupoStack = ({navigation}) => (
       options={{
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
-        title: 'Meus Grupos'
+        title: 'Meus Grupos',
       }}
     />
     <Stack.Screen
@@ -122,11 +124,45 @@ const GrupoStack = ({navigation}) => (
       }}
     />
 
-<Stack.Screen
+    <Stack.Screen
       name="CriarGrupos2"
       component={TelaCriarGrupos2}
       options={{
         title: 'Criar Grupos',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+  </Stack.Navigator>
+);
+
+const CampeonatoStack = ({navigation}) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Grupo"
+      component={TelaCampeonatos}
+      options={{
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+        title: 'Campeonatos',
+      }}
+    />
+
+    <Stack.Screen
+      name="CriarCampeonatos"
+      component={TelaCriarCampeonatos}
+      options={{
+        title: 'Criar Campeonatos',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+
+    <Stack.Screen
+      name="CriarCampeonatos2"
+      component={TelaCriarCampeonatos2}
+      options={{
+        title: 'Criar Campeonatos',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}
@@ -140,7 +176,7 @@ const AppStack = () => {
       screenOptions={{
         activeTintColor: '#2e64e5',
         tabBarStyle: {
-        backgroundColor: 'rgba(34,36,40,1)',
+          backgroundColor: 'rgba(34,36,40,1)',
         },
       }}>
       <Tab.Screen
@@ -165,6 +201,17 @@ const AppStack = () => {
           headerShown: false,
           tabBarIcon: ({color, size}) => (
             <Icon name="people-outline" color={color} size={size} />
+          ),
+        }}
+      />
+
+      <Tab.Screen
+        name="Campeonatos"
+        component={CampeonatoStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({color, size}) => (
+            <Icon name="trophy" color={color} size={size} />
           ),
         }}
       />

@@ -8,11 +8,14 @@ import {
   SafeAreaView,
   TextInput,
   Alert,
+  Button,
+  Input,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {Picker} from '@react-native-picker/picker';
 import {useFocusEffect} from '@react-navigation/native';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 export default function TelaCriarGrupos2({navigation, route}) {
   const {user} = useContext(AuthContext);
@@ -26,13 +29,49 @@ export default function TelaCriarGrupos2({navigation, route}) {
   const [selectGame, setSelectGame] = useState();
 
   const [inputChampionshipName, setInputChampionshipName] = useState('');
-  const [inputChampionshipGameImage, setInputChampionshipGameImage] = useState('');
+  const [inputChampionshipGameImage, setInputChampionshipGameImage] =
+    useState('');
   const [inputChampionshipGame, setInputChampionshipGame] = useState('');
   const [inputChampionshipOwner, setInputChampionshipOwner] = useState('');
-  const [inputChampionshipDescription, setInputChampionshipDescription] = useState('');
+  const [inputChampionshipDescription, setInputChampionshipDescription] =
+    useState('');
   const [inputChampionshipMembers, setInputChampionshipMembers] = useState([]);
   const [inputChampionshipRank, setChampionshipRank] = useState('');
   const [inputChampionshipAwards, setChampionshipAwards] = useState('');
+  const [inputChampionshipDateTime, setChampionshipDateTime] = useState('');
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = date => {
+    //console.warn('A date has been picked: ', date);
+    setChampionshipDateTime(date),
+      setDate(date),
+      setTime(date),
+      hideDatePicker();
+  };
+
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+
+  const getDate = () => {
+    let tempDate = date.toString().split(' ');
+    return date !== '' ? `${tempDate[2]} ${tempDate[1]} ${tempDate[3]}` : '';
+  };
+
+  const getTime = () => {
+    let tempTime = time.toString().split('');
+    return time !== ''
+      ? `${tempTime[16]}${tempTime[17]}${tempTime[18]}${tempTime[19]}${tempTime[20]}`
+      : '';
+  };
 
   const getUser = async () => {
     const currentUser = await firestore()
@@ -70,10 +109,10 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .doc(route.params.idGame)
       .get()
       .then(querySnapshot => {
-        setChampionshipGameName(querySnapshot.data().gameName);
+        setGameName(querySnapshot.data().gameName);
         setInputChampionshipGame(querySnapshot.data().gameName);
         setInputChampionshipGameImage(querySnapshot.data().gameImage);
-        console.log(querySnapshot.data().gameImage)
+        console.log(querySnapshot.data().gameImage);
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -85,9 +124,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .collection('user')
       .doc(user.uid)
       .get()
-      .then(
-        setInputMembers(user.uid)
-      )
+      .then(setInputChampionshipMembers(user.uid))
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
@@ -117,7 +154,9 @@ export default function TelaCriarGrupos2({navigation, route}) {
               placeholderTextColor="#C0C0C0"
               autoCorrect={false}
               color="#EEEEEE"
-              onChangeText={championshipName => setInputChampionshipName(championshipName)}
+              onChangeText={championshipName =>
+                setInputChampionshipName(championshipName)
+              }
             />
           </View>
 
@@ -125,52 +164,118 @@ export default function TelaCriarGrupos2({navigation, route}) {
           <View style={{alignItems: 'center'}}>
             <TextInput
               style={styles.inputText}
-              placeholder="Digite uma descrição para seu campeonato"
+              placeholder="Digite uma breve descrição"
               placeholderTextColor="#C0C0C0"
               autoCorrect={false}
               color="#EEEEEE"
-              onChangeText={championshipDescription => setInputChampionshipDescription(championshipDescription)}
+              onChangeText={championshipDescription =>
+                setInputChampionshipDescription(championshipDescription)
+              }
+            />
+          </View>
+
+          <Text style={styles.descriptionText}> Premiação </Text>
+          <View style={{alignItems: 'center'}}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Digite qual a premiação"
+              placeholderTextColor="#C0C0C0"
+              autoCorrect={false}
+              color="#EEEEEE"
+              onChangeText={championshipAwards =>
+                setInputChampionshipAwards(championshipAwards)
+              }
             />
           </View>
 
           <Text style={styles.descriptionText}> Ranking </Text>
           <View style={styles.container}>
-            <Picker
-              style={[styles.inputText]}
-              selectedValue={selectGame}
-              onValueChange={itemValue => {
-                setSelectGame(itemValue), setChampionshipRank(itemValue);
+            <View
+              style={{
+                backgroundColor: '#363636',
+                width: '90%',
+                marginBottom: 15,
+                borderRadius: 7,
+                marginBottom: '6%',
+                textAlign: 'center',
+                height: 48,
+                justifyContent: 'center',
               }}>
-              <Picker.Item
-                value=""
-                label="Selecione seu ranking"
-                enabled={false}
+              <Picker
+                style={{color: '#FFF'}}
+                selectedValue={selectGame}
+                onValueChange={itemValue => {
+                  setSelectGame(itemValue), setChampionshipRank(itemValue);
+                }}>
+                <Picker.Item
+                  value=""
+                  label="Selecione o ranking minimo do campeonato"
+                  enabled={false}
+                />
+                {data.map(item => (
+                  <Picker.Item label={item} key={item} value={item} />
+                ))}
+              </Picker>
+            </View>
+          </View>
+
+          <Text style={styles.descriptionText}> Data e hora </Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'center',
+            }}>
+            <TextInput
+              style={styles.inputDateTime}
+              value={getDate()}
+              placeholderTextColor="#C0C0C0"
+              autoCorrect={false}
+              color="#EEEEEE"
+              editable={false}
+            />
+            <TextInput
+              style={styles.inputDateTime}
+              value={getTime()}
+              placeholderTextColor="#C0C0C0"
+              autoCorrect={false}
+              color="#EEEEEE"
+              editable={false}
+            />
+          </View>
+
+          <View style={styles.btnDatetime}>
+            <TouchableOpacity onPress={showDatePicker}>
+              <Text style={styles.submitText}> Selecione a data e hora</Text>
+              <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="datetime"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
               />
-              {data.map(item => (
-                <Picker.Item label={item} key={item} value={item} />
-              ))}
-            </Picker>
+            </TouchableOpacity>
+          </View>
+
+          <View style={{alignItems: 'center'}}>
+            <TouchableOpacity
+              style={styles.btnSubmit}
+              onPress={() => [
+                criarGrupo(
+                  inputChampionshipGame,
+                  inputChampionshipName,
+                  inputChampionshipOwner,
+                  inputChampionshipDescription,
+                  inputChampionshipMembers,
+                  inputChampionshipRank,
+                  inputChampionshipGameImage,
+                  inputChampionshipDateTime,
+                ),
+                MoveGrupos(),
+              ]}>
+              <Text style={styles.submitText}> Criar</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <View style={{alignItems: 'center'}}>
-          <TouchableOpacity
-            style={styles.btnSubmit}
-            onPress={() =>
-              [criarGrupo(
-                inputChampionshipGame,
-                inputChampionshipName,
-                inputChampionshipOwner,
-                inputChampionshipDescription,
-                inputChampionshipMembers,
-                inputChampionshipRank,
-                inputChampionshipGameImage,
-                inputChampionshipDate,
-              ), MoveGrupos()]
-            }>
-            <Text style={styles.submitText}> Criar</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container2}></View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -203,9 +308,19 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     marginLeft: '5%',
   },
+  btnDatetime: {
+    backgroundColor: '#492BB3',
+    width: '90%',
+    height: 50,
+    borderRadius: 7,
+    marginTop: '5%',
+    marginLeft: '5%',
+    alignItems: 'center',
+    textAlign: 'center',
+  },
   submitText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 20,
     margin: '3%',
   },
   registerText: {
@@ -229,7 +344,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 20,
   },
   contactText: {
     color: '#777777',
@@ -262,7 +377,7 @@ const styles = StyleSheet.create({
   },
   boxText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 20,
   },
   topPage: {
     flexDirection: 'row',
@@ -283,10 +398,21 @@ const styles = StyleSheet.create({
     width: '90%',
     marginBottom: 15,
     color: '#FFF',
-    fontSize: 17,
+    fontSize: 16,
     borderRadius: 7,
     padding: 10,
     marginBottom: '6%',
+  },
+  inputDateTime: {
+    backgroundColor: '#363636',
+    width: '41%',
+    marginBottom: 15,
+    color: '#FFF',
+    fontSize: 15,
+    borderRadius: 7,
+    padding: 10,
+    marginLeft: '4%',
+    marginRight: '4%',
   },
   descriptionText: {
     color: '#c0c0c0',

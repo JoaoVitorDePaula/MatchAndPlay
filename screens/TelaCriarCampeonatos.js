@@ -1,10 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {
-  View,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import {View, TouchableOpacity, StyleSheet, Text} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import {Picker} from '@react-native-picker/picker';
@@ -56,7 +51,7 @@ export default function TelaCriarCapeonatos({navigation}) {
   };
 
   const MoverCriarGrupos = () => {
-    navigation.navigate('CriarCampeonatos2',{
+    navigation.navigate('CriarCampeonatos2', {
       idGame: selectGame,
     });
   };
@@ -68,25 +63,32 @@ export default function TelaCriarCapeonatos({navigation}) {
   return (
     <View style={styles.container}>
       <View style={styles.container1}>
-      <Text style={styles.userText}>Selecione o jogo do grupo:</Text>
+        <Text style={styles.userText}>Selecione o jogo do grupo:</Text>
       </View>
-      <Picker
-        style={styles.inputText}
-        selectedValue={selectGame}
-        onValueChange={(itemValue, itemIndex) => setSelectGame(itemValue)}>
-        {data.map(item => (
-          <Picker.Item
-            label={item.gameName}
-            key={item.id}
-            value={item.id}
-          />
-        ))}
-      </Picker>
+      <View
+        style={{
+          backgroundColor: '#363636',
+          width: '90%',
+          marginBottom: 15,
+          fontSize: 17,
+          borderRadius: 7,
+          marginBottom: '6%',
+          marginTop: '6%',
+        }}>
+        <Picker
+          style={{color: '#FFF'}}
+          selectedValue={selectGame}
+          onValueChange={(itemValue, itemIndex) => setSelectGame(itemValue)}>
+          {data.map(item => (
+            <Picker.Item label={item.gameName} key={item.id} value={item.id} />
+          ))}
+        </Picker>
+      </View>
       <TouchableOpacity
-            style={styles.btnSubmit}
-            onPress={() => MoverCriarGrupos()}>
-            <Text style={styles.buttonText}> Próximo</Text>
-          </TouchableOpacity>
+        style={styles.btnSubmit}
+        onPress={() => MoverCriarGrupos()}>
+        <Text style={styles.buttonText}> Próximo</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -106,7 +108,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   container1: {
-    marginTop: '10%'
+    marginTop: '10%',
   },
   btnSubmit: {
     backgroundColor: '#492BB3',
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     padding: 10,
     marginBottom: '6%',
-    marginTop: '6%'
+    marginTop: '6%',
   },
   descriptionText: {
     color: '#c0c0c0',

@@ -32,6 +32,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
   const [inputDescription, setInputDescription] = useState('');
   const [inputMembers, setInputMembers] = useState([]);
   const [inputRank, setRank] = useState('');
+  const [inputMaxMembers, setInputMaxMembers] = useState(0);
 
   const getUser = async () => {
     const currentUser = await firestore()
@@ -150,6 +151,18 @@ export default function TelaCriarGrupos2({navigation, route}) {
               ))}
             </Picker>
           </View>
+
+          <Text style={styles.descriptionText}> Tamanho do grupo </Text>
+          <View style={{alignItems: 'center'}}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Digite o tamanho do seu grupo"
+              placeholderTextColor="#C0C0C0"
+              autoCorrect={false}
+              color="#EEEEEE"
+              onChangeText={maxMembers => setInputMaxMembers(maxMembers)}
+            />
+          </View>
         </View>
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
@@ -163,6 +176,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
                 inputMembers,
                 inputRank,
                 inputGroupGameImage,
+                inputMaxMembers,
               ), MoveGrupos()]
             }>
             <Text style={styles.submitText}> Criar</Text>

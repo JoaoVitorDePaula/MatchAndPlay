@@ -27,13 +27,14 @@ export default function TelaCapeonatos({navigation}) {
         <ImageBackground 
     source={{uri: item.groupGameImage}}
         imageStyle={{opacity: 0.2}}
-        style={{width: '100%', height: '100%'}}
+        style={{width: '100%'}}
         blurRadius={3}>
           <Text style={styles.grupoTitleText}>{item.groupName}</Text>
           <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
           <Text style={styles.grupoText}>Rank: {item.rank}</Text>
           <Text style={styles.grupoText}>Tipo: Competitivo</Text>
-          <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
+          <Text style={styles.grupoText}>Membros: {item.members.length}/{item.maxMembers}</Text>
+          <Text style={styles.grupoTextEnd}>Avaliação: ⭐⭐⭐⭐⭐</Text>
           </ImageBackground>
         </View>
         
@@ -185,11 +186,16 @@ const styles = StyleSheet.create({
     color: '#FFF',
     marginLeft: '2%',
   },
-  grupoTitleText: {
+  grupoTextEnd: {
     fontSize: 20,
     color: '#FFF',
+    marginLeft: '2%',
+    marginBottom: '2%',	
+  },
+  grupoTitleText: {
+    fontSize: 25,
+    color: '#FFF',
     fontWeight: 'bold',
-    marginBottom: '5%',
     marginLeft: '3%',
   },
   meusGruposText: {
@@ -204,7 +210,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#363636',
     borderRadius: 10,
-    height: 190,
     width: 260,
     marginLeft: 10,
     marginBottom: 20,

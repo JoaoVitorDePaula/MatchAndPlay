@@ -22,28 +22,48 @@ export default function TelaGrupos({navigation}) {
 
   const renderItem = ({item}) => (
     <>
-      <TouchableOpacity style={styles.buttonMaisStyle}>
+      <TouchableOpacity
+        style={styles.buttonMaisStyle}
+        onPress={() =>
+          navigation.navigate('VisualizarGrupos', {
+            id: item.id,
+            description: item.description,
+            groupGame: item.groupGame,
+            groupName: item.groupName,
+            groupOwner: item.groupOwner,
+            members: item.members,
+            rank: item.rank,
+            rating: item.rating,
+            maxMembers: item.maxMembers,
+            groupGameImage: item.groupGameImage,
+          })
+        }>
         <View style={styles.boxGrupos}>
-        <ImageBackground 
-    source={{uri: item.groupGameImage}}
-        imageStyle={{opacity: 0.2}}
-        style={{width: '100%', height: '100%'}}
-        blurRadius={3}>
-          <Text style={styles.grupoTitleText}>{item.groupName}</Text>
-          <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
-          <Text style={styles.grupoText}>Rank: {item.rank}</Text>
-          <Text style={styles.grupoText}>Tipo: Competitivo</Text>
-          <Text style={styles.grupoText}>Avaliação: ⭐⭐⭐⭐⭐</Text>
+          <ImageBackground
+            source={{uri: item.groupGameImage}}
+            imageStyle={{opacity: 0.2}}
+            style={{width: '100%'}}
+            blurRadius={3}>
+            <Text style={styles.grupoTitleText}>{item.groupName}</Text>
+            <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
+            <Text style={styles.grupoText}>Rank: {item.rank}</Text>
+            <Text style={styles.grupoText}>Tipo: Competitivo</Text>
+            <Text style={styles.grupoText}>
+              Membros: {item.members.length}/{item.maxMembers}
+            </Text>
+            <Text style={styles.grupoTextEnd}>Avaliação: ⭐⭐⭐⭐⭐</Text>
           </ImageBackground>
         </View>
-        
       </TouchableOpacity>
-      
     </>
   );
 
   const MoverCriarGrupos = () => {
     navigation.navigate('CriarGrupos');
+  };
+
+  const MoverBuscarGrupos = () => {
+    navigation.navigate('BuscarGrupos');
   };
 
   const getGroups = () => {
@@ -64,13 +84,16 @@ export default function TelaGrupos({navigation}) {
             members: documentSnapshot.data().members,
             rank: documentSnapshot.data().rank,
             rating: documentSnapshot.data().rating,
+            maxMembers: documentSnapshot.data().maxMembers,
             groupGameImage: documentSnapshot.data().groupGameImage,
           };
           d.push(group);
         });
         setList(d);
         setData(d.filter(item => item.groupOwner.indexOf(a) > -1));
-        setGroups(d.filter(item => item.members.includes(a) && item.groupOwner != a));
+        setGroups(
+          d.filter(item => item.members.includes(a) && item.groupOwner != a),
+        );
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -106,7 +129,7 @@ export default function TelaGrupos({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnSubmit}
-            onPress={() => MoverCriarGrupos()}>
+            onPress={() => MoverBuscarGrupos()}>
             <Text style={styles.searchText}> Buscar Grupos</Text>
           </TouchableOpacity>
         </View>
@@ -185,12 +208,18 @@ const styles = StyleSheet.create({
     color: '#FFF',
     marginLeft: '2%',
   },
-  grupoTitleText: {
+  grupoTextEnd: {
     fontSize: 20,
     color: '#FFF',
+    marginLeft: '2%',
+    marginBottom: '4%',
+  },
+  grupoTitleText: {
+    fontSize: 25,
+    color: '#FFF',
     fontWeight: 'bold',
-    marginBottom: '5%',
     marginLeft: '3%',
+    marginTop: '2%',
   },
   meusGruposText: {
     color: '#FFF',
@@ -204,7 +233,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#363636',
     borderRadius: 10,
-    height: 190,
     width: 260,
     marginLeft: 10,
     marginBottom: 20,

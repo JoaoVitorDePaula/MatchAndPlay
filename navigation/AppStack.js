@@ -9,6 +9,7 @@ import TelaCriarGrupos from '../screens/TelaCriarGrupos';
 import TelaCriarGrupos2 from '../screens/TelaCriarGrupos2';
 import TelaEditarPerfil from '../screens/TelaEditarPerfil';
 import TelaBusca from '../screens/TelaBusca';
+import TelaBuscarGrupos from '../screens/TelaBuscarGrupos';
 import TelaGrupos from '../screens/TelaGrupos';
 import TelaVisualizarPerfil from '../screens/TelaVisualizarPerfil';
 import TelaVisualizarJogos from '../screens/TelaVisualizarJogos';
@@ -16,6 +17,7 @@ import TelaSelecionarFotoPerfil from '../screens/TelaSelecionarFotoPerfil';
 import TelaCampeonatos from '../screens/TelaCampeonatos';
 import TelaCriarCampeonatos from '../screens/TelaCriarCampeonatos';
 import TelaCriarCampeonatos2 from '../screens/TelaCriarCampeonatos2';
+import TelaVisualizarGrupos from '../screens/TelaVisualizarGrupos';
 
 const Stack = createStackNavigator();
 
@@ -129,6 +131,26 @@ const GrupoStack = ({navigation}) => (
       component={TelaCriarGrupos2}
       options={{
         title: 'Criar Grupos',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+
+<Stack.Screen
+      name="BuscarGrupos"
+      component={TelaBuscarGrupos}
+      options={{
+        title: 'Buscar Grupos',
+        headerStyle: {backgroundColor: '#191919'},
+        headerTintColor: '#fff',
+      }}
+    />
+
+<Stack.Screen
+      name="VisualizarGrupos"
+      component={TelaVisualizarGrupos}
+      options={{
+        title: 'Grupo',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}

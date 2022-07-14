@@ -139,6 +139,7 @@ export const AuthProvider = ({children}) => {
           members,
           rank,
           gameImage,
+          maxMembers,
         ) => {
           firestore()
             .collection('groups')
@@ -151,6 +152,7 @@ export const AuthProvider = ({children}) => {
               members: [members],
               rating: 0,
               groupGameImage: gameImage,
+              maxMembers: maxMembers,
             })
             .then(() => {
               console.log('Grupo criado!');

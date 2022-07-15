@@ -30,12 +30,17 @@ const TelaBuscaGrupos = ({navigation, route}) => {
     <>
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate('TelaVisualizarGrupos', {
+          navigation.navigate('VisualizarGrupos', {
             id: item.id,
-            gameImage: item.gameImage,
-            gameName: item.gameName,
-            platforms: item.platforms,
             description: item.description,
+            groupGame: item.groupGame,
+            groupName: item.groupName,
+            groupOwner: item.groupOwner,
+            members: item.members,
+            rank: item.rank,
+            rating: item.rating,
+            maxMembers: item.maxMembers,
+            groupGameImage: item.groupGameImage,
           })
         }>
         <View style={styles.boxGrupos}>
@@ -50,7 +55,6 @@ const TelaBuscaGrupos = ({navigation, route}) => {
             <Text style={styles.grupoText}>
               members: {item.members.length}/{item.maxMembers}
             </Text>
-
             <Text style={styles.grupoTextEnd}>Avaliação: ⭐⭐⭐⭐⭐</Text>
           </ImageBackground>
         </View>
@@ -73,7 +77,7 @@ const TelaBuscaGrupos = ({navigation, route}) => {
             groupGameImage: documentSnapshot.data().groupGameImage,
             groupName: documentSnapshot.data().groupName,
             groupOwner: documentSnapshot.data().groupOwner,
-            members: documentSnapshot.data().members.length,
+            members: documentSnapshot.data().members,
             rank: documentSnapshot.data().rank,
             rating: documentSnapshot.data().rating,
             maxMembers: documentSnapshot.data().maxMembers,
@@ -134,6 +138,7 @@ const TelaBuscaGrupos = ({navigation, route}) => {
           windowSize={1}
         />
       </View>
+      
     </SafeAreaView>
   );
 };

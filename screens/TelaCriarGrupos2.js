@@ -73,7 +73,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
         setGameName(querySnapshot.data().gameName);
         setInputGroupGame(querySnapshot.data().gameName);
         setInputGroupGameImage(querySnapshot.data().gameImage);
-        console.log(querySnapshot.data().gameImage)
+        console.log(querySnapshot.data().gameImage);
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -85,9 +85,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
       .collection('user')
       .doc(user.uid)
       .get()
-      .then(
-        setInputMembers(user.uid)
-      )
+      .then(setInputMembers(user.uid))
       .catch(e => {
         console.log('Erro, catch user' + e);
       });
@@ -105,8 +103,6 @@ export default function TelaCriarGrupos2({navigation, route}) {
         <View style={{alignItems: 'center'}}>
           <Text style={styles.userText}> {gameName} </Text>
         </View>
-
-        <View style={{alignItems: 'center'}}></View>
 
         <View>
           <Text style={styles.descriptionText}> Nome do grupo </Text>
@@ -132,11 +128,19 @@ export default function TelaCriarGrupos2({navigation, route}) {
               onChangeText={description => setInputDescription(description)}
             />
           </View>
-
           <Text style={styles.descriptionText}> Ranking </Text>
-          <View style={styles.container}>
+          <View
+            style={{
+              backgroundColor: '#363636',
+              width: '90%',
+              marginBottom: 15,
+              fontSize: 17,
+              borderRadius: 7,
+              marginBottom: '6%',
+              marginLeft: '5%',
+            }}>
             <Picker
-              style={[styles.inputText]}
+              style={{color: '#FFF'}}
               selectedValue={selectGame}
               onValueChange={itemValue => {
                 setSelectGame(itemValue), setRank(itemValue);
@@ -167,8 +171,8 @@ export default function TelaCriarGrupos2({navigation, route}) {
         <View style={{alignItems: 'center'}}>
           <TouchableOpacity
             style={styles.btnSubmit}
-            onPress={() =>
-              [criarGrupo(
+            onPress={() => [
+              criarGrupo(
                 inputGroupGame,
                 inputGroupName,
                 inputGroupOwner,
@@ -177,8 +181,9 @@ export default function TelaCriarGrupos2({navigation, route}) {
                 inputRank,
                 inputGroupGameImage,
                 inputMaxMembers,
-              ), MoveGrupos()]
-            }>
+              ),
+              MoveGrupos(),
+            ]}>
             <Text style={styles.submitText}> Criar</Text>
           </TouchableOpacity>
         </View>

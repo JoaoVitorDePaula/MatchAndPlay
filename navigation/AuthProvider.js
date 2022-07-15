@@ -58,7 +58,8 @@ export const AuthProvider = ({children}) => {
                     bio: '',
                     email: auth().currentUser.email,
                     name: '',
-                    userImage: 'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
+                    userImage:
+                      'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
                     userName: '',
                   })
                   .catch(error => {
@@ -96,7 +97,8 @@ export const AuthProvider = ({children}) => {
                     bio: '',
                     email: email,
                     name: '',
-                    userImage: 'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
+                    userImage:
+                      'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
                     userName: '',
                   })
                   .catch(error => {
@@ -156,10 +158,29 @@ export const AuthProvider = ({children}) => {
             })
             .then(() => {
               console.log('Grupo criado!');
-              Alert.alert(
-                'Grupo criado!',
-                'Seu grupo foi criado com sucesso.',
-              );
+              Alert.alert('Grupo criado!', 'Seu grupo foi criado com sucesso.');
+            });
+        },
+
+        addMember: async (members, groupId) => {
+          firestore()
+            .collection('groups')
+            .doc(groupId)
+            .update({members: firebase.firestore.FieldValue.arrayUnion(members)})
+            .then(() => {
+              console.log('Voce entrou!');
+              Alert.alert('Você entrou!', 'Você está no grupo');
+            });
+        },
+
+        removeMember: async (members, groupId) => {
+          firestore()
+            .collection('groups')
+            .doc(groupId)
+            .update({members: firebase.firestore.FieldValue.arrayRemove(members)})
+            .then(() => {
+              console.log('Voce saiu!');
+              Alert.alert('Você saiu!', 'Você saiu do grupo');
             });
         },
 

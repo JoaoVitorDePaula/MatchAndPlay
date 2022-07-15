@@ -17,112 +17,35 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
 
   const [userData, setUserData] = useState(null);
 
-  const [isFavorite, setIsFavorite] = useState();
+  const [memberIn, setMemberIn] = useState(true);
 
-  const [isFavorited, setIsFavorited] = useState();
+  const {addMember} = useContext(AuthContext);
 
-  const [favorited, setFavorited] = useState(0);
+  const {removeMember} = useContext(AuthContext);
 
-  const getIsFavorite = async () => {
+  const [member, setMember] = useState([]);
+
+  const [merbersNumber, setMembersNumber] = useState(null);
+
+  const getMember = async () => {
     await firestore()
-      .collection('user')
-      .doc()
-      .collection('following')
-      .doc(route.params.userId)
+      .collection('groups')
+      .doc(route.params.id)
       .get()
       .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          setIsFavorite(true);
+        if (documentSnapshot.exists) 
+        setMember(documentSnapshot.data().members);
+        if (member.includes(user.uid)) {
+          setMemberIn(true);
         } else {
-          setIsFavorite(false);
+          setMemberIn(false);
         }
       });
   };
 
-  const getIsFavorited = async () => {
-    await firestore()
-      .collection('user')
-      .doc()
-      .collection('favorited')
-      .doc(user.uid)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
-          setIsFavorited(true);
-        } else {
-          setIsFavorited(false);
-        }
-      });
-  };
-
-  const changeFollowState = async () => {
-    if (isFavorite) {
-      await firestore()
-        .collection('user')
-        .doc(user.uid)
-        .collection('favoriteGames')
-        .doc(route.params.id)
-        .delete()
-        .then();
-    } else {
-      await firestore()
-        .collection('user')
-        .doc(user.uid)
-        .collection('favoriteGames')
-        .doc(route.params.id)
-        .set({
-          groupGameImage: route.params.groupGameImage,
-          gameName: route.params.groupGameName
-        })
-        .then();
-    }
-  };
-
-  const changeFollowState2 = async () => {
-    if (isFavorited) {
-      await firestore()
-        .collection('games')
-        .doc(route.params.id)
-        .collection('favorited')
-        .doc(user.uid)
-        .delete()
-        .then();
-    } else {
-      await firestore()
-        .collection('games')
-        .doc(route.params.id)
-        .collection('favorited')
-        .doc(user.uid)
-        .set({
-          groupGameImage: route.params.groupGameImage,
-          gameName: route.params.gameName
-        })
-        .set({})
-        .then();
-    }
-  };
-
-  const getFavorite = async () => {
-    await firestore()
-      .collection('games')
-      .doc(route.params.id)
-      .collection('favoriteGames')
-      .get()
-      .then(({size}) => {
-        setFollowing(size);
-      });
-  };
-
-  const getFavorited = async () => {
-    await firestore()
-      .collection('games')
-      .doc(route.params.id)
-      .collection('favorited')
-      .get()
-      .then(({size}) => {
-        setFavorited(size);
-      });
-  };
+  const getMemberNumber = () =>{
+    setMembersNumber(route.params.members.length);
+  }
 
   const getUser = async () => {
     await firestore()
@@ -137,45 +60,24 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
   };
 
   const RenderFollowButton = () => {
-    if (isFavorite) {
+    if (memberIn) {
       return (
         <TouchableOpacity
-          onPress={() => [
-            changeFollowState(),
-            changeFollowState2(),
-            setFavorited(state => state - 1),
-          ]}>
-          <Image
-            style={{
-              width: 40,
-              height: 40,
-              alignSelf: 'flex-end',
-              marginTop: '2%',
-              marginRight: '2%',
-            }}
-            source={require('../src/assets/favorite.png')}
-          />
+          style={styles.btnSubmit}
+          onPress={() => [addMember(user.uid, route.params.id), getMember(),setMembersNumber(state => state + 1)]}>
+          <Text style={styles.submitText}> Participar</Text>
         </TouchableOpacity>
       );
     } else {
       return (
         <TouchableOpacity
+          style={styles.btnSubmit}
           onPress={() => [
-            changeFollowState(),
-            changeFollowState2(),
-            setFavorited(state => state + 1),
+            removeMember(user.uid, route.params.id),
+            getMember(),
+            setMembersNumber(state => state - 1)
           ]}>
-          <Image
-            style={{
-              width: 40,
-              height: 40,
-              opacity: 0.2,
-              alignSelf: 'flex-end',
-              marginTop: '2%',
-              marginRight: '2%',
-            }}
-            source={require('../src/assets/favorite.png')}
-          />
+          <Text style={styles.submitText}> Sair</Text>
         </TouchableOpacity>
       );
     }
@@ -183,49 +85,7 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(), getIsFavorite(), getFavorite();
-    }, []),
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      getIsFavorited(), getFavorited();
-    }, []),
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const subscribe = firestore()
-        .collection('user')
-        .doc(user.uid)
-        .collection('favoriteGames')
-        .doc(route.params.id)
-        .onSnapshot(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            setIsFavorite(true);
-          } else {
-            setIsFavorite(false);
-          }
-        });
-      return () => subscribe();
-    }, []),
-  );
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const subscribe = firestore()
-        .collection('games')
-        .doc(route.params.id)
-        .collection('favorited')
-        .doc(user.uid)
-        .onSnapshot(documentSnapshot => {
-          if (documentSnapshot.exists) {
-            setIsFavorited(true);
-          } else {
-            setIsFavorited(false);
-          }
-        });
-      return () => subscribe();
+      getUser(),getMemberNumber();
     }, []),
   );
 
@@ -236,9 +96,6 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
         imageStyle={{opacity: 0.2}}
         style={{width: '100%', height: '100%'}}
         blurRadius={3}>
-
-        <RenderFollowButton/>
-        
         <View
           style={{
             alignItems: 'center',
@@ -257,8 +114,13 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
           </View>
         </View>
         <View style={styles.containerLines}>
-          <Text style={styles.followersNText}>{route.params.members.length}/{route.params.maxMembers}</Text>
+          <Text style={styles.followersNText}>
+            {merbersNumber}/{route.params.maxMembers}
+          </Text>
           <Text style={styles.followersText}>Membros</Text>
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <RenderFollowButton />
         </View>
       </ImageBackground>
     </SafeAreaView>
@@ -356,5 +218,20 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginRight: '1%',
     marginLeft: '1%',
+  },
+  btnSubmit: {
+    backgroundColor: '#492BB3',
+    width: '45%',
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 7,
+    marginTop: '5%',
+    marginBottom: '5%',
+  },
+  submitText: {
+    color: '#FFF',
+    fontSize: 18,
+    margin: '3%',
   },
 });

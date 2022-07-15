@@ -77,6 +77,7 @@ export default function TelaGrupos({navigation}) {
 
         querySnapshot.forEach(documentSnapshot => {
           const group = {
+            id: documentSnapshot.id,
             description: documentSnapshot.data().description,
             groupGame: documentSnapshot.data().groupGame,
             groupName: documentSnapshot.data().groupName,

@@ -70,8 +70,18 @@ export default function TelaCriarGrupos({navigation}) {
       <View style={styles.container1}>
       <Text style={styles.userText}>Selecione o jogo do grupo:</Text>
       </View>
+      <View
+        style={{
+          backgroundColor: '#363636',
+          width: '90%',
+          marginBottom: 15,
+          fontSize: 17,
+          borderRadius: 7,
+          marginBottom: '6%',
+          marginTop: '6%',
+        }}>
       <Picker
-        style={styles.inputText}
+      style={{color: '#FFF'}}
         selectedValue={selectGame}
         onValueChange={(itemValue, itemIndex) => setSelectGame(itemValue)}>
         {data.map(item => (
@@ -82,6 +92,7 @@ export default function TelaCriarGrupos({navigation}) {
           />
         ))}
       </Picker>
+      </View>
       <TouchableOpacity
             style={styles.btnSubmit}
             onPress={() => MoverCriarGrupos()}>

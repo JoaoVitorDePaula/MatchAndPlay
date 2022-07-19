@@ -184,6 +184,17 @@ export const AuthProvider = ({children}) => {
             });
         },
 
+        deleteGroup: async (groupId) => {
+          firestore()
+            .collection('groups')
+            .doc(groupId)
+            .delete()
+            .then(() => {
+              console.log('Grupo excluido!');
+              Alert.alert('Excluido!', 'Grupo excluido!');
+            });
+        },
+
         criarCampeonato: async (
           championshipGame,
           championshipName,

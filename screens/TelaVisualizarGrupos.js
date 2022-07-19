@@ -23,47 +23,13 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
 
   const {removeMember} = useContext(AuthContext);
 
-  const [member, setMember] = useState([]);
+  const {deleteGroup} = useContext(AuthContext);
 
   const [merbersNumber, setMembersNumber] = useState(null);
 
-  const getMember = async () => {
-    await firestore()
-      .collection('groups')
-      .doc(route.params.id)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists) 
-        setMember(documentSnapshot.data().members);
-        if (member.includes(user.uid)) {
-          setMemberIn(true);
-        } else {
-          setMemberIn(false);
-        }
-      });
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      const subscribe = firestore()
-        .collection('groups')
-        .doc(route.params.id)
-        .onSnapshot(documentSnapshot => {
-          if (documentSnapshot.data().members.includes(user.uid)) { 
-            setMemberIn(false);
-            console.log(documentSnapshot.data().members);
-          } else {
-            setMemberIn(true);
-            console.log(documentSnapshot.data().members);
-          }
-        });
-      return () => subscribe();
-    }, []),
-  );
- 
-  const getMemberNumber = () =>{
+  const getMemberNumber = () => {
     setMembersNumber(route.params.members.length);
-  }
+  };
 
   const getUser = async () => {
     await firestore()
@@ -77,13 +43,28 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
       });
   };
 
+  const MoveGrupos = () => {
+    navigation.navigate('Grupo');
+  };
+
   const RenderFollowButton = () => {
     if (memberIn) {
       return (
         <TouchableOpacity
           style={styles.btnSubmit}
-          onPress={() => [addMember(user.uid, route.params.id),setMembersNumber(state => state + 1)]}>
+          onPress={() => [
+            addMember(user.uid, route.params.id),
+            setMembersNumber(state => state + 1),
+          ]}>
           <Text style={styles.submitText}> Participar</Text>
+        </TouchableOpacity>
+      );
+    } else if (memberIn == false && route.params.groupOwner == user.uid) {
+      return (
+        <TouchableOpacity
+          style={styles.btnSubmit}
+          onPress={() => [deleteGroup(route.params.id), MoveGrupos()]}>
+          <Text style={styles.submitText}> Excluir</Text>
         </TouchableOpacity>
       );
     } else {
@@ -92,8 +73,7 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
           style={styles.btnSubmit}
           onPress={() => [
             removeMember(user.uid, route.params.id),
-            
-            setMembersNumber(state => state - 1)
+            setMembersNumber(state => state - 1),
           ]}>
           <Text style={styles.submitText}> Sair</Text>
         </TouchableOpacity>
@@ -103,7 +83,25 @@ const TelaVisualizarGrupos = ({navigation, route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(),getMemberNumber();
+      const subscribe = firestore()
+        .collection('groups')
+        .doc(route.params.id)
+        .onSnapshot(documentSnapshot => {
+          if (documentSnapshot.data().members.includes(user.uid)) {
+            setMemberIn(false);
+            console.log(documentSnapshot.data().members);
+          } else {
+            setMemberIn(true);
+            console.log(documentSnapshot.data().members);
+          }
+        });
+      return () => subscribe();
+    }, []),
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getUser(), getMemberNumber();
     }, []),
   );
 

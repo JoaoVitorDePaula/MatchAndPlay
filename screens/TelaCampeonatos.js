@@ -24,22 +24,20 @@ export default function TelaCapeonatos({navigation}) {
     <>
       <TouchableOpacity style={styles.buttonMaisStyle}>
         <View style={styles.boxGrupos}>
-        <ImageBackground 
-    source={{uri: item.groupGameImage}}
-        imageStyle={{opacity: 0.2}}
-        style={{width: '100%'}}
-        blurRadius={3}>
-          <Text style={styles.grupoTitleText}>{item.groupName}</Text>
-          <Text style={styles.grupoText}>Jogo: {item.groupGame}</Text>
-          <Text style={styles.grupoText}>Rank: {item.rank}</Text>
-          <Text style={styles.grupoText}>Tipo: Competitivo</Text>
-          <Text style={styles.grupoText}>Membros: {item.members.length}/{item.maxMembers}</Text>
-          <Text style={styles.grupoTextEnd}>Avaliação: ⭐⭐⭐⭐⭐</Text>
+          <ImageBackground
+            source={{uri: item.groupGameImage}}
+            imageStyle={{opacity: 0.2}}
+            style={{width: '100%'}}
+            blurRadius={3}>
+            <Text style={styles.grupoTitleText}></Text>
+            <Text style={styles.grupoText}></Text>
+            <Text style={styles.grupoText}></Text>
+            <Text style={styles.grupoText}></Text>
+            <Text style={styles.grupoText}></Text>
+            <Text style={styles.grupoTextEnd}></Text>
           </ImageBackground>
         </View>
-        
       </TouchableOpacity>
-      
     </>
   );
 
@@ -71,7 +69,9 @@ export default function TelaCapeonatos({navigation}) {
         });
         setList(d);
         setData(d.filter(item => item.groupOwner.indexOf(a) > -1));
-        setGroups(d.filter(item => item.members.includes(a) && item.groupOwner != a));
+        setGroups(
+          d.filter(item => item.members.includes(a) && item.groupOwner != a),
+        );
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -126,7 +126,7 @@ export default function TelaCapeonatos({navigation}) {
           <Text style={styles.meusGruposText}>CAMPEONATOS QUE PARTICIPO</Text>
           <FlatList
             horizontal
-            data={groups}
+            data={data}
             renderItem={renderItem}
             keyExtractor={item => item.groupName}
           />
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#FFF',
     marginLeft: '2%',
-    marginBottom: '2%',	
+    marginBottom: '2%',
   },
   grupoTitleText: {
     fontSize: 25,

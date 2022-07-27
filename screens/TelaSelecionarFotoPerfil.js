@@ -11,12 +11,15 @@ import {
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 
+import {CardAvatar} from '../components/CardAvatar';
+
 export default function TelaSelecionarFotoPerfil({navigation}) {
   const {user} = useContext(AuthContext);
 
   const [data, setData] = useState([]);
 
   const [selectImage, setSelectImage] = useState();
+  const [isFocusImagem, setIsFocusImagem] = useState(0);
 
   const getUser = async () => {
     const currentUser = await firestore()
@@ -31,7 +34,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       });
   };
 
-  const getProfileImages = async() => {
+  const getProfileImages = async () => {
     firestore()
       .collection('profile_images')
       .get()
@@ -51,10 +54,7 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
       })
       .then(() => {
         console.log('User Updated!');
-        Alert.alert(
-          'Perfil Atualizado!',
-          'Sua foto foi atualizada!',
-        );
+        Alert.alert('Perfil Atualizado!', 'Sua foto foi atualizada!');
       });
   };
 
@@ -84,15 +84,15 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
   const RenderItem = () => (
     <>
       {data.map((item, index) => (
-        <TouchableOpacity key={index} 
-        onPress={() => [setSelectImage(item)]}>
-          <Image
-            style={styles.jogosImage}
-            source={{
-              uri: item,
-            }}
-          />
-        </TouchableOpacity>
+        <CardAvatar
+          key={index}
+          data={item}
+          isActive={isFocusImagem === index}
+          onPress={() => {
+            setIsFocusImagem(index);
+            setSelectImage(item);
+          }}
+        />
       ))}
     </>
   );
@@ -103,15 +103,22 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
 
   return (
     <ScrollView>
-    <View style={styles.container}>
-      <Text style={styles.titleText}>Selecione seu avatar:</Text>
-      <View style={{flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center',}}>
-        <RenderItem />
+      <View style={styles.container}>
+        <Text style={styles.titleText}>Selecione seu avatar:</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}>
+          <RenderItem />
+        </View>
+        <TouchableOpacity
+          style={styles.btnSubmit}
+          onPress={() => [handleUpdate(), MoveEditarPerfil()]}>
+          <Text style={styles.buttonText}> Salvar </Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.btnSubmit} onPress={() => [handleUpdate(), MoveEditarPerfil()]}>
-        <Text style={styles.buttonText}> Salvar </Text>
-      </TouchableOpacity>
-    </View>
     </ScrollView>
   );
 }
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#191919', 
+    backgroundColor: '#191919',
   },
   container: {
     flex: 1,
@@ -161,13 +168,8 @@ const styles = StyleSheet.create({
   },
   jogosImage: {
     backgroundColor: '#rgba(255, 255, 255, 0.4)',
-    borderWidth: 1,
-    borderColor: '#494949',
     borderRadius: 100,
     height: 70,
     width: 70,
-    marginLeft: "4%",
-    marginBottom: "8%",
-    borderColor: 'rgba(255, 255, 255, 1)'
   },
 });

@@ -107,7 +107,7 @@ export default function TelaCapeonatos({navigation}) {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.btnSubmit}
-            onPress={() => MoverCriarGrupos()}>
+            >
             <Text style={styles.searchText}> Buscar Campeonato</Text>
           </TouchableOpacity>
         </View>

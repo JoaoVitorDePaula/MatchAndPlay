@@ -161,7 +161,7 @@ const GrupoStack = ({navigation}) => (
 const CampeonatoStack = ({navigation}) => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Grupo"
+      name="Campeonato"
       component={TelaCampeonatos}
       options={{
         headerStyle: {backgroundColor: '#191919'},

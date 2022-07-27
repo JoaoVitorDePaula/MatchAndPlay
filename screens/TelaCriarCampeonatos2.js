@@ -87,7 +87,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
   };
 
   const MoveGrupos = () => {
-    navigation.navigate('Grupo');
+    navigation.navigate('Campeonato');
   };
 
   const getGames = () => {
@@ -260,17 +260,7 @@ export default function TelaCriarGrupos2({navigation, route}) {
             <TouchableOpacity
               style={styles.btnSubmit}
               onPress={() => [
-                criarGrupo(
-                  inputChampionshipGame,
-                  inputChampionshipName,
-                  inputChampionshipOwner,
-                  inputChampionshipDescription,
-                  inputChampionshipMembers,
-                  inputChampionshipRank,
-                  inputChampionshipGameImage,
-                  inputChampionshipDateTime,
-                ),
-                MoveGrupos(),
+                MoveGrupos()
               ]}>
               <Text style={styles.submitText}> Criar</Text>
             </TouchableOpacity>

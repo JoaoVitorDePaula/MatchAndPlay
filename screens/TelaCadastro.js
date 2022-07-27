@@ -22,7 +22,7 @@ export default function TelaCadastro() {
   const [inputSenha, setInputSenha] = useState('');
   const [hidePass, setHidePass] = useState(true);
 
-  const {register, googleRegister} = useContext(AuthContext);
+  const {register, googleSignIn} = useContext(AuthContext);
 
   useEffect(() => {
     keyboardDidShowListener = Keyboard.addListener(
@@ -145,7 +145,7 @@ export default function TelaCadastro() {
           </Text>
 
           <View style={{flex: 1, flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => googleRegister()}>
+            <TouchableOpacity onPress={() => googleSignIn('register')}>
               <Image
                 style={{
                   width: 60,
@@ -155,7 +155,7 @@ export default function TelaCadastro() {
                 source={require('../src/assets/google.png')}
               />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => criarConta()}>
+            <TouchableOpacity>
               <Image
                 style={{
                   width: 62,

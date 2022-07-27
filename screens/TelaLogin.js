@@ -25,7 +25,7 @@ export default function TelaLogin({navigation}) {
     navigation.navigate('Cadastro');
   };
 
-  const {login, googleLogin} = useContext(AuthContext);
+  const {login, googleSignIn} = useContext(AuthContext);
 
   useEffect(() => {
     keyboardDidShowListener = Keyboard.addListener(
@@ -145,7 +145,7 @@ export default function TelaLogin({navigation}) {
         </View>
 
         <View style={{flex: 1, flexDirection: 'row'}}>
-          <TouchableOpacity onPress={() => googleLogin()}>
+          <TouchableOpacity onPress={() => googleSignIn('login')}>
             <Image
               style={{
                 width: 60,
@@ -155,7 +155,7 @@ export default function TelaLogin({navigation}) {
               source={require('../src/assets/google.png')}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => criarConta()}>
+          <TouchableOpacity>
             <Image
               style={{
                 width: 62,

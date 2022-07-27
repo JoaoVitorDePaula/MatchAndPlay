@@ -73,7 +73,7 @@ export default function TelaEditarPerfil({navigation}) {
 
   useFocusEffect(
     React.useCallback(() => {
-      getUser(),getProfileImage();
+      getUser(), getProfileImage();
     }, []),
   );
 
@@ -90,7 +90,7 @@ export default function TelaEditarPerfil({navigation}) {
                 justifyContent: 'center',
                 alignItems: 'center',
                 marginTop: '5%',
-                backgroundColor: 'rgba(255, 255, 255,0.4)'
+                backgroundColor: 'rgba(255, 255, 255,0.4)',
               }}>
               <ImageBackground
                 source={{
@@ -114,8 +114,7 @@ export default function TelaEditarPerfil({navigation}) {
                       borderWidth: 1,
                       borderColor: '#000',
                       borderRadius: 10,
-                      backgroundColor:'rgba(255,255,255,0.3)',
-                      
+                      backgroundColor: 'rgba(255,255,255,0.3)',
                     }}
                   />
                 </View>

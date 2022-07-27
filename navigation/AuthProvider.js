@@ -41,7 +41,7 @@ export const AuthProvider = ({children}) => {
           }
         },
 
-        googleRegister: async () => {
+        googleSignIn: async props => {
           try {
             const {idToken} = await GoogleSignin.signIn();
 
@@ -51,27 +51,36 @@ export const AuthProvider = ({children}) => {
             await auth()
               .signInWithCredential(googleCredential)
               .then(() => {
-                firestore()
-                  .collection('user')
-                  .doc(auth().currentUser.uid)
-                  .set({
-                    bio: '',
-                    email: auth().currentUser.email,
-                    name: '',
-                    userImage:
-                      'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
-                    userName: '',
-                  })
-                  .catch(error => {
-                    console.log(
-                      'Erro ao adicionar o usuario ao banco de dados: ',
-                      error,
-                    );
-                    Alert.alert(
-                      'Erro:',
-                      'Não foi possivel se conectar ao banco de dados corretamente!',
-                    );
-                  });
+                if (props == 'register') {
+                  firestore()
+                    .collection('user')
+                    .doc(auth().currentUser.uid)
+                    .set({
+                      bio: '',
+                      email: auth().currentUser.email,
+                      name: '',
+                      userImage:
+                        'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/Profile%20Images%2Fdefault.jpeg?alt=media&token=69eb3d60-6b38-41bf-a7ca-ca781f3f4483',
+                      userName: '',
+                    })
+                    .catch(error => {
+                      console.log(
+                        'Erro ao adicionar o usuario ao banco de dados: ',
+                        error,
+                      );
+                      Alert.alert(
+                        'Erro:',
+                        'Não foi possivel se conectar ao banco de dados corretamente!',
+                      );
+                    });
+                } else if (props == 'login') {
+                  auth()
+                    .signInWithCredential(googleCredential)
+                    .catch(error => {
+                      console.log('Alguma coisa deu errado: ', error);
+                      Alert.alert('Erro:', 'Algo deu errado, tente novamente.');
+                    });
+                }
               })
               .catch(error => {
                 console.log('Erro ao se cadastrar: ', error);
@@ -166,7 +175,9 @@ export const AuthProvider = ({children}) => {
           firestore()
             .collection('groups')
             .doc(groupId)
-            .update({members: firebase.firestore.FieldValue.arrayUnion(members)})
+            .update({
+              members: firebase.firestore.FieldValue.arrayUnion(members),
+            })
             .then(() => {
               console.log('Voce entrou!');
               Alert.alert('Você entrou!', 'Você está no grupo');
@@ -177,14 +188,16 @@ export const AuthProvider = ({children}) => {
           firestore()
             .collection('groups')
             .doc(groupId)
-            .update({members: firebase.firestore.FieldValue.arrayRemove(members)})
+            .update({
+              members: firebase.firestore.FieldValue.arrayRemove(members),
+            })
             .then(() => {
               console.log('Voce saiu!');
               Alert.alert('Você saiu!', 'Você saiu do grupo');
             });
         },
 
-        deleteGroup: async (groupId) => {
+        deleteGroup: async groupId => {
           firestore()
             .collection('groups')
             .doc(groupId)

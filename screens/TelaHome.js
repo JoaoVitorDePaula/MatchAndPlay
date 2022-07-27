@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
@@ -17,6 +18,8 @@ const TelaHome = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [dataMobile, setDataMobile] = useState([]);
   const [dataPC, setDataPC] = useState([]);
+
+  const {height} = useState(120);
 
   const MoveBuscar = () => {
     navigation.navigate('Busca');
@@ -48,12 +51,12 @@ const TelaHome = ({navigation, route}) => {
   const getMobilieGames = () => {
     firestore()
       .collection('games')
-      .orderBy("gameName")
+      .orderBy('gameName')
       .get()
       .then(querySnapshot => {
         let d = [];
         let a = 'Mobile';
-        
+
         querySnapshot.forEach(documentSnapshot => {
           const game = {
             id: documentSnapshot.id,
@@ -64,7 +67,7 @@ const TelaHome = ({navigation, route}) => {
           };
           d.push(game);
         });
-        setDataMobile(d.filter(item => item.platforms.indexOf(a) >- 1));
+        setDataMobile(d.filter(item => item.platforms.indexOf(a) > -1));
       })
       .catch(e => {
         console.log('Erro, catch user' + e);
@@ -200,7 +203,7 @@ const TelaHome = ({navigation, route}) => {
         </View>
         <View style={styles.containerJogos}>
           <ScrollView horizontal={true}>
-            <RenderItem></RenderItem>
+            <RenderItem />
           </ScrollView>
         </View>
 
@@ -209,12 +212,11 @@ const TelaHome = ({navigation, route}) => {
             <Text style={styles.meusJogosText}> JOGUE EM QUALQUER LUGAR</Text>
           </View>
         </View>
+
         <View style={styles.containerJogos}>
-          <TouchableOpacity>
-            <ScrollView horizontal={true}>
-              <RenderItemMobile/>
-            </ScrollView>
-          </TouchableOpacity>
+          <ScrollView horizontal={true}>
+            <RenderItemMobile />
+          </ScrollView>
         </View>
 
         <View style={styles.container2}>
@@ -223,11 +225,9 @@ const TelaHome = ({navigation, route}) => {
           </View>
         </View>
         <View style={styles.containerJogos}>
-          <TouchableOpacity>
-            <ScrollView horizontal={true}>
-              <RenderItemPC/>
-            </ScrollView>
-          </TouchableOpacity>
+          <ScrollView horizontal={true}>
+            <RenderItemPC />
+          </ScrollView>
         </View>
 
         <View style={styles.container3}>
@@ -264,6 +264,7 @@ const styles = StyleSheet.create({
   containerJogos: {
     flexDirection: 'row',
     marginTop: '1%',
+    height: Dimensions.get('window').height / 4,
   },
   btnSubmit: {
     backgroundColor: '#492BB3',
@@ -301,8 +302,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#363636',
     borderRadius: 10,
-    height: 180,
-    width: 130,
+    height: '100%',
+    width: Dimensions.get('window').width / 2.7,
     marginLeft: 10,
     marginBottom: 20,
   },

@@ -47,7 +47,8 @@ const FeedStack = ({navigation}) => (
       name="TelaVisualizarPerfil"
       component={TelaVisualizarPerfil}
       options={{
-        title: 'Visualizar Perfil',
+        headerTransparent: true,
+        title: '',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}
@@ -56,6 +57,7 @@ const FeedStack = ({navigation}) => (
       name="TelaVisualizarJogos"
       component={TelaVisualizarJogos}
       options={{
+        headerTransparent: true,
         title: 'Jogo',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
@@ -70,25 +72,18 @@ const ProfileStack = ({navigation}) => (
       name="TelaPerfil"
       component={TelaPerfil}
       options={{
+        headerTransparent: true,
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
-        title: 'Perfil',
-        headerRight: () => (
-          <MaterialCommunityIcons.Button
-            name="account-edit"
-            size={25}
-            backgroundColor="#191919"
-            color="#fff"
-            onPress={() => navigation.navigate('TelaEditarPerfil')}
-          />
-        ),
+        title: '',
       }}
     />
     <Stack.Screen
       name="TelaEditarPerfil"
       component={TelaEditarPerfil}
       options={{
-        title: 'Editar Perfil',
+        headerTransparent: true,
+        title: '',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}
@@ -97,7 +92,8 @@ const ProfileStack = ({navigation}) => (
       name="TelaSelecionarFotoPerfil"
       component={TelaSelecionarFotoPerfil}
       options={{
-        title: 'Selecione sua foto perfil',
+        headerTransparent: true,
+        title: '',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}
@@ -150,7 +146,8 @@ const GrupoStack = ({navigation}) => (
       name="VisualizarGrupos"
       component={TelaVisualizarGrupos}
       options={{
-        title: 'Grupo',
+        headerTransparent: true,
+        title: '',
         headerStyle: {backgroundColor: '#191919'},
         headerTintColor: '#fff',
       }}

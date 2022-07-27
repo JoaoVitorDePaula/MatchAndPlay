@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   ImageBackground,
+  Dimensions
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
@@ -152,6 +153,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
               alignSelf: 'flex-end',
               marginTop: '2%',
               marginRight: '2%',
+              marginTop: Dimensions.get('window').height / 20,
             }}
             source={require('../src/assets/favorite.png')}
           />
@@ -173,6 +175,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
               alignSelf: 'flex-end',
               marginTop: '2%',
               marginRight: '2%',
+              marginTop: Dimensions.get('window').height / 20,
             }}
             source={require('../src/assets/favorite.png')}
           />
@@ -244,6 +247,7 @@ const TelaVisualizarJogos = ({navigation, route}) => {
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'center',
+            
           }}>
           <Text style={styles.gameTitle}>{route.params.gameName}</Text>
         </View>

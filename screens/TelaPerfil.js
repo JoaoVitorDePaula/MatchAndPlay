@@ -6,6 +6,8 @@ import {
   ScrollView,
   Image,
   Text,
+  Dimensions,
+  ImageBackground,
 } from 'react-native';
 import {Avatar, Title, Caption} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
@@ -104,85 +106,111 @@ const TelaPerfil = ({navigation, route}) => {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
-      <View style={styles.container}>
-        <View style={styles.topPage}>
-          <Avatar.Image
-            style={styles.userImg}
-            source={{
-              uri: userData.userImage,
-            }}
-            size={90}
-          />
-          <View>
-            <Text style={styles.userText}>
-              {userData ? userData.userName : 'Ainda não há nome'}
-            </Text>
-            <Caption style={styles.captionText}>
-              {' '}
-              {userData ? userData.bio : 'Ainda não há nada aqui'}
-            </Caption>
-          </View>
-        </View>
-        <View style={styles.infoBoxWrapper}>
-          <View
-            style={[
-              styles.infoBox,
-              {
-                borderRightColor: '#777777',
-                borderRightWidth: 1,
-              },
-            ]}>
-            <Title style={styles.boxText}>{followed}</Title>
-            <Caption style={styles.captionText}>Seguidores</Caption>
-          </View>
-          <View style={styles.infoBox}>
-            <Title style={styles.boxText}>{following}</Title>
-            <Caption style={styles.captionText}>Seguindo</Caption>
-          </View>
-        </View>
+      <ScrollView>
+        <View style={styles.container}>
+          <View style={styles.topPage}>
+            <View style={styles.containerImage}>
+              <ImageBackground
+                imageStyle={{opacity: 0.7}}
+                style={{width: '100%', alignItems: 'center'}}
+                source={{
+                  uri: 'https://firebasestorage.googleapis.com/v0/b/matchandplay-9b795.appspot.com/o/TERRA.jpg?alt=media&token=8fdadce2-7067-4887-bb55-c3eac98a1347',
+                }}>
+                <Avatar.Image
+                  style={styles.userImg}
+                  source={{
+                    uri: userData.userImage,
+                  }}
+                  size={120}
+                />
+              </ImageBackground>
+            </View>
 
-        <View style={styles.socialContainer}>
+            <View
+              style={{
+                width: '100%',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <Text style={styles.userText}>
+                {userData ? userData.userName : 'Ainda não há nome'}
+              </Text>
 
-          <View style={{flexDirection: 'row'}}>
-            <MaterialCommunityIcons
-              style={styles.IconContact}
-              name="instagram"
-              size={30}
-            />
-            <Text style={styles.contactText}>Joao_123</Text>
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <MaterialCommunityIcons
-              style={styles.IconContact}
-              name="whatsapp"
-              size={30}
-            />
-            <Text style={styles.contactText}>999887766</Text>
-          </View>
-
-          <View style={{flexDirection: 'row'}}>
-            <MaterialCommunityIcons
-              style={styles.IconContact}
-              name="discord"
-              size={30}
-            />
-            <Text style={styles.contactText}>Meu Servidor</Text>
-          </View>
-
-        </View>
-
-        <View style={styles.container2}>
-          <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
-          <ScrollView>
-            <View style={styles.containerJogos}>
-              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-                <RenderItem />
+              <View style={{}}>
+                <MaterialCommunityIcons.Button
+                  name="account-edit"
+                  size={35}
+                  backgroundColor="#191919"
+                  color="#fff"
+                  onPress={() => navigation.navigate('TelaEditarPerfil')}
+                />
               </View>
             </View>
-          </ScrollView>
+            <Caption style={styles.bioText}>
+              {userData ? userData.bio : 'Ainda não há nada aqui'}
+            </Caption>
+
+            <View style={styles.infoBoxWrapper}>
+              <View
+                style={[
+                  styles.infoBox,
+                  {
+                    borderRightColor: '#191919',
+                    borderRightWidth: 4,
+                  },
+                ]}>
+                <Title style={styles.boxText}>{followed}</Title>
+                <Caption style={styles.captionText}>Seguidores</Caption>
+              </View>
+              <View style={styles.infoBox}>
+                <Title style={styles.boxText}>{following}</Title>
+                <Caption style={styles.captionText}>Seguindo</Caption>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.socialContainer}>
+            <View style={{flexDirection: 'row'}}>
+              <MaterialCommunityIcons
+                style={styles.IconContact}
+                name="instagram"
+                size={30}
+              />
+              <Text style={styles.contactText}>Joao_123</Text>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <MaterialCommunityIcons
+                style={styles.IconContact}
+                name="whatsapp"
+                size={30}
+              />
+              <Text style={styles.contactText}>999887766</Text>
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <MaterialCommunityIcons
+                style={styles.IconContact}
+                name="discord"
+                size={30}
+              />
+              <Text style={styles.contactText}>Meu Servidor</Text>
+            </View>
+          </View>
+
+          <View style={styles.container2}>
+            <Text style={styles.meusJogosText}>Meus jogos favoritos</Text>
+            <View>
+              <View style={styles.containerJogos}>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                  <RenderItem />
+                </View>
+              </View>
+            </View>
+          </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -207,6 +235,9 @@ const styles = StyleSheet.create({
   },
   containerJogos: {
     marginTop: '3%',
+  },
+  containerImage: {
+    width: '100%',
   },
   socialContainer: {
     flexDirection: 'row',
@@ -236,9 +267,9 @@ const styles = StyleSheet.create({
   userImg: {
     marginRight: '5%',
     marginLeft: '5%',
-    marginTop: '5%',
-    marginBottom: '5%',
-    backgroundColor: 'rgba(255, 255, 255,0.3)',
+    marginTop: '30%',
+    marginBottom: '2%',
+    backgroundColor: '#777777',
   },
   btnEditar: {},
   registerText: {
@@ -246,46 +277,57 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   userText: {
+    flex: 2,
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 22,
+    marginTop: 15,
+    marginLeft: Dimensions.get('window').height / 14,
+    textAlign: 'center',
+  },
+  bioText: {
+    color: '#FFF',
+    fontSize: 13,
+    color: '#777777',
+    marginBottom: 15,
   },
   contactText: {
-    color: '#777777',
+    color: '#C0C0C0',
     marginLeft: '5%',
     alignSelf: 'center',
   },
   captionText: {
     color: '#FFF',
     fontSize: 13,
-    color: '#777777',
+    color: '#868686',
   },
   IconContact: {
-    color: '#777777',
+    color: '#DEDEDE',
     marginLeft: '2%',
-    
   },
   infoBox: {
-    width: '50%',
+    width: '30%',
     alignItems: 'center',
     justifyContent: 'center',
+    color: '#777777',
   },
   infoBoxWrapper: {
-    borderBottomColor: '#777777',
-    borderBottomWidth: 1,
-    borderTopColor: '#777777',
-    borderTopWidth: 1,
+    borderBottomColor: '#868686',
+    borderBottomWidth: 0,
+    borderTopColor: '#868686',
+    borderTopWidth: 0,
     flexDirection: 'row',
-    height: 100,
-    marginBottom: '3%',
-    backgroundColor: '#1D1D1D',
+    height: 70,
+    marginBottom: 10,
+    backgroundColor: '#2E2E2E',
+    borderRadius: 50,
   },
   boxText: {
     color: '#FFF',
     fontSize: 18,
   },
   topPage: {
-    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonMaisStyle: {
     backgroundColor: '#494949',
@@ -312,8 +354,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#363636',
     borderRadius: 10,
-    height: 150,
-    width: 100,
+    height: Dimensions.get('window').height / 5,
+    width: Dimensions.get('window').width / 3.6,
     marginBottom: '5%',
     marginLeft: 16,
   },

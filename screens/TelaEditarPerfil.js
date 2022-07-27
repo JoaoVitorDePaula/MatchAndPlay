@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Text,
   Alert,
+  Dimensions
 } from 'react-native';
 import {Title} from 'react-native-paper';
 import {AuthContext} from '../navigation/AuthProvider';
@@ -80,7 +81,7 @@ export default function TelaEditarPerfil({navigation}) {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#191919'}}>
       <ScrollView>
-        <View style={{alignItems: 'center'}}>
+        <View style={{alignItems: 'center', marginTop: Dimensions.get('window').height / 10}}>
           <TouchableOpacity onPress={() => MoveSelecionarFoto()}>
             <View
               style={{

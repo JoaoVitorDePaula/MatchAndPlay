@@ -6,6 +6,7 @@ import {
   Image,
   Text,
   ImageBackground,
+  Dimensions
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
@@ -173,6 +174,7 @@ const styles = StyleSheet.create({
     color: '#FFF',
     fontSize: 35,
     marginBottom: '5%',
+    marginTop: Dimensions.get('window').height / 20
   },
   gameText: {
     color: '#FFF',

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   ImageBackground,
+  Dimensions
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {SafeAreaView} from 'react-navigation';
@@ -137,22 +138,24 @@ export default function TelaGrupos({navigation}) {
 
         <View>
           <Text style={styles.meusGruposText}>MEUS GRUPOS</Text>
-          <FlatList
+          {data.length > 0 ? (<FlatList
             horizontal
             data={data}
             renderItem={renderItem}
             keyExtractor={item => item.groupName}
-          />
+          />) : (<Text style={styles.noGroupsText}>Ainda ainda não criou nenhum grupos!</Text>)}
+          
         </View>
 
         <View>
           <Text style={styles.meusGruposText}>GRUPOS QUE PARTICIPO</Text>
-          <FlatList
+          {groups.length > 0 ? (<FlatList
             horizontal
             data={groups}
             renderItem={renderItem}
             keyExtractor={item => item.groupName}
-          />
+          />) : (<Text style={styles.noGroupsText}>Ainda não está em nenhum grupo!</Text>)}
+          
         </View>
       </View>
     </SafeAreaView>
@@ -245,5 +248,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     borderRadius: 7,
     padding: 10,
+  },
+  noGroupsText: {
+    color: '#FFF',
+    fontSize: 40,
+    color: '#777777',
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    marginBottom: Dimensions.get('window').height / 30
+    
   },
 });

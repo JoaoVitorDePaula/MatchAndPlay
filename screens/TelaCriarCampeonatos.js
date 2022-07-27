@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   },
   userText: {
     color: '#FFF',
-    fontSize: 30,
+    fontSize: 22,
   },
   buttonText: {
     color: '#FFF',

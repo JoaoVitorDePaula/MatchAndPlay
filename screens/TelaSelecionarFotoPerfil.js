@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import firestore from '@react-native-firebase/firestore';
@@ -125,13 +126,11 @@ export default function TelaSelecionarFotoPerfil({navigation}) {
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#191919',
   },
   container: {
-    flex: 1,
     width: '100%',
     backgroundColor: '#191919',
     alignItems: 'center',
@@ -142,34 +141,22 @@ const styles = StyleSheet.create({
   },
   btnSubmit: {
     backgroundColor: '#492BB3',
-    width: '38%',
+    width: 150,
     height: 45,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 7,
     marginTop: '5%',
-    marginLeft: '5%',
-  },
-  userImg: {
-    marginRight: '5%',
-    marginLeft: '5%',
-    marginTop: '5%',
-    marginBottom: '5%',
+    marginBottom: '10%',
   },
   titleText: {
     color: '#FFF',
-    fontSize: 30,
+    fontSize: 22,
     marginBottom: '5%',
-    marginTop: '5%',
+    marginTop: Dimensions.get('window').height / 17
   },
   buttonText: {
     color: '#FFF',
     fontSize: 18,
-  },
-  jogosImage: {
-    backgroundColor: '#rgba(255, 255, 255, 0.4)',
-    borderRadius: 100,
-    height: 70,
-    width: 70,
   },
 });
